@@ -2,17 +2,17 @@
 const f = async (url: string, options: RequestInit = {}) => {
   const response = await fetch(url, {
     method: "POST",
+    ...options,
     headers: {
       "Content-Type": "application/json",
       ...options.headers,
     },
-    ...options,
   });
 
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, message: ${errorText}`
+      `HTTP error! status: ${response.status}, message: ${errorText}`,
     );
   }
 

@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export async function GET(req: NextRequest) {
@@ -12,7 +10,7 @@ export async function GET(req: NextRequest) {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
-    
+
     if (userError || !user) {
       console.log("User authentication failed:", userError);
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -20,12 +18,25 @@ export async function GET(req: NextRequest) {
 
     const userId = user.id;
 
-    // Get user data from our custom users table
-    const { data: userData, error: userDataError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", userId)
-      .single();
+    // Get user data, generations, and payments in parallel
+    const [userDataResult, generationsResult, paymentsResult] =
+      await Promise.all([
+        supabase.from("users").select("*").eq("id", userId).single(),
+        supabase
+          .from("name_generations")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("payments")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false }),
+      ]);
+
+    const { data: userData, error: userDataError } = userDataResult;
+    const { data: generations, error: generationsError } = generationsResult;
+    const { data: payments, error: paymentsError } = paymentsResult;
 
     if (userDataError) {
       console.error("User fetch error:", userDataError);
@@ -35,13 +46,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Get user's name generations
-    const { data: generations, error: generationsError } = await supabase
-      .from("name_generations")
-      .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-
     if (generationsError) {
       console.error("Generations fetch error:", generationsError);
       return NextResponse.json(
@@ -50,9 +54,18 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    if (paymentsError) {
+      console.error("Payments fetch error:", paymentsError);
+      return NextResponse.json(
+        { error: "Failed to fetch payments" },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       credits: userData.credits,
       generations: generations || [],
+      payments: payments || [],
       user: {
         id: userData.id,
         email: userData.email,
