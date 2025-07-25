@@ -10,29 +10,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
-import {
-  CreditCard,
-  History,
-  Settings,
-  Sparkles,
-  Calendar,
-  User,
-  Plus,
-  Edit,
-  Save,
-  X,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { CreditCard, History, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { NameGeneration, Payment } from "@/lib/supabase";
-import Link from "next/link";
+import { Payment } from "@/lib/supabase";
 import { getUserData, payment } from "@/app/api";
-import { createBrowserSupabaseClient } from "@/lib/supabase";
-import { toast } from "sonner";
+
+// Import our new components
+import { StatsCards } from "@/components/dashboard/stats-cards";
+import { ProfileEditor } from "@/components/dashboard/profile-editor";
+import { PasswordChanger } from "@/components/dashboard/password-changer";
+import { GenerationHistory } from "@/components/dashboard/generation-history";
+import { CreditPurchase } from "@/components/dashboard/credit-purchase";
+import { PaymentHistory } from "@/components/dashboard/payment-history";
+import { UserPreferences } from "@/components/dashboard/user-preferences";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -41,43 +33,9 @@ export default function DashboardPage() {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [payments, setPayments] = useState<Payment[]>([]);
 
-  // Profile editing states
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
-  const [profileForm, setProfileForm] = useState({
-    fullName: "",
-    email: "",
-  });
-
-  // Password change states
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    new: false,
-    confirm: false,
-  });
-
-  const supabase = createBrowserSupabaseClient();
-
   useEffect(() => {
     if (user) {
       fetchUserData();
-    }
-  }, [user]);
-
-  // Initialize profile form when user data is available
-  useEffect(() => {
-    if (user) {
-      setProfileForm({
-        fullName: user.user_metadata?.full_name || "",
-        email: user.email || "",
-      });
     }
   }, [user]);
 
@@ -99,7 +57,6 @@ export default function DashboardPage() {
     try {
       const data = await payment({ credits: creditAmount });
       if (data?.checkout_url) {
-        // Redirect to Creem.io checkout
         window.location.href = data.checkout_url;
       } else {
         console.error("Payment creation failed:", data.error);
@@ -111,106 +68,6 @@ export default function DashboardPage() {
     } finally {
       setIsPurchasing(false);
     }
-  };
-
-  const handleUpdateProfile = async () => {
-    if (!profileForm.fullName.trim()) {
-      toast.error("Full name is required");
-      return;
-    }
-
-    setIsUpdatingProfile(true);
-    try {
-      // Update user metadata
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: { full_name: profileForm.fullName.trim() },
-      });
-
-      if (updateError) throw updateError;
-
-      // Update email if changed
-      if (profileForm.email !== user?.email) {
-        const { error: emailError } = await supabase.auth.updateUser({
-          email: profileForm.email,
-        });
-
-        if (emailError) throw emailError;
-
-        toast.success(
-          "Profile updated! Check your email to confirm the email change."
-        );
-      } else {
-        toast.success("Profile updated successfully!");
-      }
-
-      setIsEditingProfile(false);
-    } catch (error: any) {
-      console.error("Failed to update profile:", error);
-      toast.error(error.message || "Failed to update profile");
-    } finally {
-      setIsUpdatingProfile(false);
-    }
-  };
-
-  const handleUpdatePassword = async () => {
-    if (!passwordForm.newPassword || !passwordForm.confirmPassword) {
-      toast.error("Please fill in all password fields");
-      return;
-    }
-
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.error("New passwords do not match");
-      return;
-    }
-
-    if (passwordForm.newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters long");
-      return;
-    }
-
-    setIsUpdatingPassword(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: passwordForm.newPassword,
-      });
-
-      if (error) throw error;
-
-      toast.success("Password updated successfully!");
-      setIsChangingPassword(false);
-      setPasswordForm({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-    } catch (error: any) {
-      console.error("Failed to update password:", error);
-      toast.error(error.message || "Failed to update password");
-    } finally {
-      setIsUpdatingPassword(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditingProfile(false);
-    setProfileForm({
-      fullName: user?.user_metadata?.full_name || "",
-      email: user?.email || "",
-    });
-  };
-
-  const handleCancelPasswordChange = () => {
-    setIsChangingPassword(false);
-    setPasswordForm({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-    setShowPasswords({
-      current: false,
-      new: false,
-      confirm: false,
-    });
   };
 
   if (!user) {
@@ -265,59 +122,12 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4"
         >
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
-              <CardTitle className="text-sm font-medium">
-                Available Credits
-              </CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="pt-1">
-              <div className="text-xl font-bold">{credits}</div>
-              <p className="text-xs text-muted-foreground">
-                Each generation costs 1 credit
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
-              <CardTitle className="text-sm font-medium">
-                Names Generated
-              </CardTitle>
-              <Sparkles className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="pt-1">
-              <div className="text-xl font-bold">{generations.length}</div>
-              <p className="text-xs text-muted-foreground">
-                Total names created
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
-              <CardTitle className="text-sm font-medium">
-                Member Since
-              </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="pt-1">
-              <div className="text-xl font-bold">
-                {user?.created_at
-                  ? new Date(user.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      year: "numeric",
-                    })
-                  : "Recently"}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Account creation date
-              </p>
-            </CardContent>
-          </Card>
+          <StatsCards
+            credits={credits}
+            generationsCount={generations.length}
+            user={user}
+          />
         </motion.div>
 
         {/* Main Content */}
@@ -352,534 +162,24 @@ export default function DashboardPage() {
             </TabsList>
 
             <TabsContent value="history">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>Your Generated Names</CardTitle>
-                      <CardDescription>
-                        All the Chinese names you've created with their meanings
-                      </CardDescription>
-                    </div>
-                    <Link href="/generate">
-                      <Button>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Generate New Name
-                      </Button>
-                    </Link>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {generations.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Sparkles className="h-10 w-10 text-gray-400 mx-auto mb-3" />
-                      <h3 className="text-base font-medium text-gray-900 mb-2">
-                        No names generated yet
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Create your first Chinese name to get started
-                      </p>
-                      <Link href="/generate">
-                        <Button size="sm">
-                          Generate Your First Name
-                          <Sparkles className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {generations.map((generation: NameGeneration, index) => (
-                        <Card
-                          key={generation.id}
-                          className="border-l-4 border-l-indigo-500"
-                        >
-                          <CardContent>
-                            <div className="flex items-start justify-between mb-2">
-                              <div>
-                                <h3 className="text-xl font-bold text-indigo-600">
-                                  {generation.generated_name.chinese_name}
-                                </h3>
-                                <p className="text-base text-gray-600">
-                                  {generation.generated_name.pinyin}
-                                </p>
-                                {generation.generated_name.traditional && (
-                                  <p className="text-xs text-gray-500">
-                                    Traditional:{" "}
-                                    {generation.generated_name.traditional}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="text-right text-xs text-gray-500">
-                                {new Date(
-                                  generation.created_at
-                                ).toLocaleDateString()}
-                              </div>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-3">
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-1">
-                                  Meaning
-                                </h4>
-                                <p className="text-gray-700 text-xs leading-relaxed">
-                                  {generation.generated_name.meaning}
-                                </p>
-                              </div>
-                              <div>
-                                <h4 className="font-medium text-gray-900 mb-1">
-                                  Cultural Significance
-                                </h4>
-                                <p className="text-gray-700 text-xs leading-relaxed">
-                                  {
-                                    generation.generated_name
-                                      .cultural_significance
-                                  }
-                                </p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <GenerationHistory generations={generations} />
             </TabsContent>
 
             <TabsContent value="credits">
               <div className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Purchase Credits</CardTitle>
-                    <CardDescription>
-                      Buy credits to generate more Chinese names. Each name
-                      generation costs 1 credit ($5).
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <Card className="border-2 border-gray-200">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-base">1 Credit</CardTitle>
-                          <div className="text-2xl font-bold">$5</div>
-                          <CardDescription className="text-xs">
-                            Perfect for trying it out
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-1">
-                          <Button
-                            className="w-full"
-                            size="sm"
-                            onClick={() => handlePurchase(1)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? "Processing..." : "Purchase"}
-                          </Button>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="border-2 border-indigo-200 bg-indigo-50">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-base">5 Credits</CardTitle>
-                          <div className="text-2xl font-bold">$20</div>
-                          <CardDescription className="text-xs">
-                            <span className="line-through text-gray-500">
-                              $25
-                            </span>
-                            <span className="text-green-600 ml-1">
-                              Save $5!
-                            </span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-1">
-                          <Button
-                            className="w-full"
-                            size="sm"
-                            onClick={() => handlePurchase(5)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? "Processing..." : "Purchase"}
-                          </Button>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="border-2 border-purple-200 bg-purple-50">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-base">
-                            10 Credits
-                          </CardTitle>
-                          <div className="text-2xl font-bold">$35</div>
-                          <CardDescription className="text-xs">
-                            <span className="line-through text-gray-500">
-                              $50
-                            </span>
-                            <span className="text-green-600 ml-1">
-                              Save $15!
-                            </span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-1">
-                          <Button
-                            className="w-full"
-                            size="sm"
-                            onClick={() => handlePurchase(10)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? "Processing..." : "Purchase"}
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Transaction History</CardTitle>
-                    <CardDescription>
-                      View your past purchases and payments
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {payments.length === 0 ? (
-                      <div className="text-center py-6 text-gray-500">
-                        No transactions yet
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {payments.map((payment: Payment) => (
-                          <div
-                            key={payment.id}
-                            className="flex items-center justify-between p-3 border rounded-lg"
-                          >
-                            <div className="flex items-center space-x-4">
-                              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <CreditCard className="h-5 w-5 text-green-600" />
-                              </div>
-                              <div>
-                                <h4 className="font-medium text-gray-900">
-                                  Credit Purchase
-                                </h4>
-                                <p className="text-sm text-gray-600">
-                                  {payment.credits_purchased} credit
-                                  {payment.credits_purchased !== 1
-                                    ? "s"
-                                    : ""}{" "}
-                                  purchased
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  {new Date(
-                                    payment.created_at
-                                  ).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-lg font-medium text-gray-900">
-                                ${Number(payment.amount).toFixed(2)}
-                              </div>
-                              <div
-                                className={`text-xs px-2 py-1 rounded-full ${
-                                  payment.status === "completed"
-                                    ? "bg-green-100 text-green-800"
-                                    : payment.status === "pending"
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : "bg-red-100 text-red-800"
-                                }`}
-                              >
-                                {payment.status.charAt(0).toUpperCase() +
-                                  payment.status.slice(1)}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                <CreditPurchase
+                  onPurchase={handlePurchase}
+                  isPurchasing={isPurchasing}
+                />
+                <PaymentHistory payments={payments} />
               </div>
             </TabsContent>
 
             <TabsContent value="settings">
               <div className="space-y-4">
-                {/* Profile Information */}
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle>Profile Information</CardTitle>
-                        <CardDescription>
-                          Update your personal information
-                        </CardDescription>
-                      </div>
-                      {!isEditingProfile && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setIsEditingProfile(true)}
-                        >
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit Profile
-                        </Button>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <User className="h-6 w-6 text-indigo-600" />
-                      </div>
-                      <div className="flex-1">
-                        {isEditingProfile ? (
-                          <div className="space-y-2">
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 mb-1">
-                                Full Name
-                              </label>
-                              <Input
-                                value={profileForm.fullName}
-                                onChange={(e) =>
-                                  setProfileForm({
-                                    ...profileForm,
-                                    fullName: e.target.value,
-                                  })
-                                }
-                                placeholder="Enter your full name"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-medium text-gray-700 mb-1">
-                                Email Address
-                              </label>
-                              <Input
-                                type="email"
-                                value={profileForm.email}
-                                onChange={(e) =>
-                                  setProfileForm({
-                                    ...profileForm,
-                                    email: e.target.value,
-                                  })
-                                }
-                                placeholder="Enter your email"
-                              />
-                            </div>
-                            <div className="flex space-x-2">
-                              <Button
-                                onClick={handleUpdateProfile}
-                                disabled={isUpdatingProfile}
-                                size="sm"
-                              >
-                                <Save className="h-4 w-4 mr-2" />
-                                {isUpdatingProfile
-                                  ? "Saving..."
-                                  : "Save Changes"}
-                              </Button>
-                              <Button
-                                variant="outline"
-                                onClick={handleCancelEdit}
-                                disabled={isUpdatingProfile}
-                                size="sm"
-                              >
-                                <X className="h-4 w-4 mr-2" />
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <h3 className="text-lg font-medium">
-                              {user?.user_metadata?.full_name || "User"}
-                            </h3>
-                            <p className="text-gray-600">{user?.email}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Password Change */}
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle>Password</CardTitle>
-                        <CardDescription>
-                          Change your account password
-                        </CardDescription>
-                      </div>
-                      {!isChangingPassword && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setIsChangingPassword(true)}
-                        >
-                          <Edit className="h-4 w-4 mr-2" />
-                          Change Password
-                        </Button>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    {isChangingPassword ? (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            New Password
-                          </label>
-                          <div className="relative">
-                            <Input
-                              type={showPasswords.new ? "text" : "password"}
-                              value={passwordForm.newPassword}
-                              onChange={(e) =>
-                                setPasswordForm({
-                                  ...passwordForm,
-                                  newPassword: e.target.value,
-                                })
-                              }
-                              placeholder="Enter new password"
-                            />
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="absolute right-0 top-0 h-full px-3"
-                              onClick={() =>
-                                setShowPasswords({
-                                  ...showPasswords,
-                                  new: !showPasswords.new,
-                                })
-                              }
-                            >
-                              {showPasswords.new ? (
-                                <EyeOff className="h-4 w-4" />
-                              ) : (
-                                <Eye className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Confirm New Password
-                          </label>
-                          <div className="relative">
-                            <Input
-                              type={showPasswords.confirm ? "text" : "password"}
-                              value={passwordForm.confirmPassword}
-                              onChange={(e) =>
-                                setPasswordForm({
-                                  ...passwordForm,
-                                  confirmPassword: e.target.value,
-                                })
-                              }
-                              placeholder="Confirm new password"
-                            />
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="absolute right-0 top-0 h-full px-3"
-                              onClick={() =>
-                                setShowPasswords({
-                                  ...showPasswords,
-                                  confirm: !showPasswords.confirm,
-                                })
-                              }
-                            >
-                              {showPasswords.confirm ? (
-                                <EyeOff className="h-4 w-4" />
-                              ) : (
-                                <Eye className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button
-                            onClick={handleUpdatePassword}
-                            disabled={isUpdatingPassword}
-                            size="sm"
-                          >
-                            <Save className="h-4 w-4 mr-2" />
-                            {isUpdatingPassword
-                              ? "Updating..."
-                              : "Update Password"}
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={handleCancelPasswordChange}
-                            disabled={isUpdatingPassword}
-                            size="sm"
-                          >
-                            <X className="h-4 w-4 mr-2" />
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-gray-600">
-                        Click "Change Password" to update your password
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Preferences */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Preferences</CardTitle>
-                    <CardDescription>
-                      Manage your notification and language preferences
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">
-                        Notifications
-                      </h4>
-                      <div className="space-y-1">
-                        <label className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            className="rounded"
-                            defaultChecked
-                          />
-                          <span className="text-xs">
-                            Email notifications for new features
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            className="rounded"
-                            defaultChecked
-                          />
-                          <span className="text-xs">Payment confirmations</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-1">
-                        Language Preferences
-                      </h4>
-                      <select className="w-full p-1 text-sm border rounded-md">
-                        <option>English</option>
-                        <option>Chinese (Simplified)</option>
-                        <option>Chinese (Traditional)</option>
-                      </select>
-                    </div>
-
-                    <Button variant="outline">Save Preferences</Button>
-                  </CardContent>
-                </Card>
+                <ProfileEditor user={user} />
+                <PasswordChanger />
+                {/* <UserPreferences /> */}
               </div>
             </TabsContent>
           </Tabs>

@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { AuthModal } from "@/components/auth-modal";
@@ -80,6 +80,12 @@ export function Navigation() {
                       className="relative h-8 w-8 rounded-full"
                     >
                       <Avatar className="h-8 w-8">
+                        {user.user_metadata?.avatar_url && (
+                          <AvatarImage 
+                            src={user.user_metadata.avatar_url} 
+                            alt="Avatar"
+                          />
+                        )}
                         <AvatarFallback>
                           {user.user_metadata?.full_name
                             ? user.user_metadata.full_name
