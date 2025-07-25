@@ -242,20 +242,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-3 py-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-8"
+          className="mb-4"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">
             Welcome back,{" "}
             {user?.user_metadata?.full_name?.split(" ")[0] || "User"}!
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-base text-gray-600">
             Manage your Chinese names, credits, and account settings
           </p>
         </motion.div>
@@ -265,17 +265,17 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4"
         >
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
               <CardTitle className="text-sm font-medium">
                 Available Credits
               </CardTitle>
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{credits}</div>
+            <CardContent className="pt-1">
+              <div className="text-xl font-bold">{credits}</div>
               <p className="text-xs text-muted-foreground">
                 Each generation costs 1 credit
               </p>
@@ -283,14 +283,14 @@ export default function DashboardPage() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
               <CardTitle className="text-sm font-medium">
                 Names Generated
               </CardTitle>
               <Sparkles className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{generations.length}</div>
+            <CardContent className="pt-1">
+              <div className="text-xl font-bold">{generations.length}</div>
               <p className="text-xs text-muted-foreground">
                 Total names created
               </p>
@@ -298,14 +298,14 @@ export default function DashboardPage() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
               <CardTitle className="text-sm font-medium">
                 Member Since
               </CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="pt-1">
+              <div className="text-xl font-bold">
                 {user?.created_at
                   ? new Date(user.created_at).toLocaleDateString("en-US", {
                       month: "short",
@@ -327,7 +327,7 @@ export default function DashboardPage() {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <Tabs defaultValue="history" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsList className="grid w-full grid-cols-3 mb-2">
               <TabsTrigger
                 value="history"
                 className="flex items-center space-x-2"
@@ -371,65 +371,65 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {generations.length === 0 ? (
-                    <div className="text-center py-12">
-                      <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <div className="text-center py-8">
+                      <Sparkles className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+                      <h3 className="text-base font-medium text-gray-900 mb-2">
                         No names generated yet
                       </h3>
-                      <p className="text-gray-600 mb-6">
+                      <p className="text-sm text-gray-600 mb-4">
                         Create your first Chinese name to get started
                       </p>
                       <Link href="/generate">
-                        <Button>
+                        <Button size="sm">
                           Generate Your First Name
                           <Sparkles className="ml-2 h-4 w-4" />
                         </Button>
                       </Link>
                     </div>
                   ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                       {generations.map((generation: NameGeneration, index) => (
                         <Card
                           key={generation.id}
                           className="border-l-4 border-l-indigo-500"
                         >
-                          <CardContent className="pt-6">
-                            <div className="flex items-start justify-between mb-4">
+                          <CardContent>
+                            <div className="flex items-start justify-between mb-2">
                               <div>
-                                <h3 className="text-2xl font-bold text-indigo-600">
+                                <h3 className="text-xl font-bold text-indigo-600">
                                   {generation.generated_name.chinese_name}
                                 </h3>
-                                <p className="text-lg text-gray-600">
+                                <p className="text-base text-gray-600">
                                   {generation.generated_name.pinyin}
                                 </p>
                                 {generation.generated_name.traditional && (
-                                  <p className="text-sm text-gray-500">
+                                  <p className="text-xs text-gray-500">
                                     Traditional:{" "}
                                     {generation.generated_name.traditional}
                                   </p>
                                 )}
                               </div>
-                              <div className="text-right text-sm text-gray-500">
+                              <div className="text-right text-xs text-gray-500">
                                 {new Date(
                                   generation.created_at
                                 ).toLocaleDateString()}
                               </div>
                             </div>
 
-                            <div className="grid md:grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 gap-3">
                               <div>
-                                <h4 className="font-medium text-gray-900 mb-2">
+                                <h4 className="font-medium text-gray-900 mb-1">
                                   Meaning
                                 </h4>
-                                <p className="text-gray-700 text-sm leading-relaxed">
+                                <p className="text-gray-700 text-xs leading-relaxed">
                                   {generation.generated_name.meaning}
                                 </p>
                               </div>
                               <div>
-                                <h4 className="font-medium text-gray-900 mb-2">
+                                <h4 className="font-medium text-gray-900 mb-1">
                                   Cultural Significance
                                 </h4>
-                                <p className="text-gray-700 text-sm leading-relaxed">
+                                <p className="text-gray-700 text-xs leading-relaxed">
                                   {
                                     generation.generated_name
                                       .cultural_significance
@@ -447,7 +447,7 @@ export default function DashboardPage() {
             </TabsContent>
 
             <TabsContent value="credits">
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <Card>
                   <CardHeader>
                     <CardTitle>Purchase Credits</CardTitle>
@@ -457,18 +457,19 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-3 gap-3">
                       <Card className="border-2 border-gray-200">
-                        <CardHeader className="text-center">
-                          <CardTitle className="text-lg">1 Credit</CardTitle>
-                          <div className="text-3xl font-bold">$5</div>
-                          <CardDescription>
+                        <CardHeader className="text-center pb-2">
+                          <CardTitle className="text-base">1 Credit</CardTitle>
+                          <div className="text-2xl font-bold">$5</div>
+                          <CardDescription className="text-xs">
                             Perfect for trying it out
                           </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="pt-1">
                           <Button
                             className="w-full"
+                            size="sm"
                             onClick={() => handlePurchase(1)}
                             disabled={isPurchasing}
                           >
@@ -478,10 +479,10 @@ export default function DashboardPage() {
                       </Card>
 
                       <Card className="border-2 border-indigo-200 bg-indigo-50">
-                        <CardHeader className="text-center">
-                          <CardTitle className="text-lg">5 Credits</CardTitle>
-                          <div className="text-3xl font-bold">$20</div>
-                          <CardDescription>
+                        <CardHeader className="text-center pb-2">
+                          <CardTitle className="text-base">5 Credits</CardTitle>
+                          <div className="text-2xl font-bold">$20</div>
+                          <CardDescription className="text-xs">
                             <span className="line-through text-gray-500">
                               $25
                             </span>
@@ -490,9 +491,10 @@ export default function DashboardPage() {
                             </span>
                           </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="pt-1">
                           <Button
                             className="w-full"
+                            size="sm"
                             onClick={() => handlePurchase(5)}
                             disabled={isPurchasing}
                           >
@@ -502,10 +504,12 @@ export default function DashboardPage() {
                       </Card>
 
                       <Card className="border-2 border-purple-200 bg-purple-50">
-                        <CardHeader className="text-center">
-                          <CardTitle className="text-lg">10 Credits</CardTitle>
-                          <div className="text-3xl font-bold">$35</div>
-                          <CardDescription>
+                        <CardHeader className="text-center pb-2">
+                          <CardTitle className="text-base">
+                            10 Credits
+                          </CardTitle>
+                          <div className="text-2xl font-bold">$35</div>
+                          <CardDescription className="text-xs">
                             <span className="line-through text-gray-500">
                               $50
                             </span>
@@ -514,9 +518,10 @@ export default function DashboardPage() {
                             </span>
                           </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="pt-1">
                           <Button
                             className="w-full"
+                            size="sm"
                             onClick={() => handlePurchase(10)}
                             disabled={isPurchasing}
                           >
@@ -537,15 +542,15 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     {payments.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500">
+                      <div className="text-center py-6 text-gray-500">
                         No transactions yet
                       </div>
                     ) : (
-                      <div className="space-y-4">
+                      <div className="space-y-2">
                         {payments.map((payment: Payment) => (
                           <div
                             key={payment.id}
-                            className="flex items-center justify-between p-4 border rounded-lg"
+                            className="flex items-center justify-between p-3 border rounded-lg"
                           >
                             <div className="flex items-center space-x-4">
                               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -602,7 +607,7 @@ export default function DashboardPage() {
             </TabsContent>
 
             <TabsContent value="settings">
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Profile Information */}
                 <Card>
                   <CardHeader>
@@ -625,16 +630,16 @@ export default function DashboardPage() {
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <User className="h-8 w-8 text-indigo-600" />
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <User className="h-6 w-6 text-indigo-600" />
                       </div>
                       <div className="flex-1">
                         {isEditingProfile ? (
-                          <div className="space-y-3">
+                          <div className="space-y-2">
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Full Name
                               </label>
                               <Input
@@ -649,7 +654,7 @@ export default function DashboardPage() {
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Email Address
                               </label>
                               <Input
@@ -834,19 +839,19 @@ export default function DashboardPage() {
                       Manage your notification and language preferences
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3">
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">
+                      <h4 className="font-medium text-gray-900 mb-1">
                         Notifications
                       </h4>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         <label className="flex items-center space-x-2">
                           <input
                             type="checkbox"
                             className="rounded"
                             defaultChecked
                           />
-                          <span className="text-sm">
+                          <span className="text-xs">
                             Email notifications for new features
                           </span>
                         </label>
@@ -856,16 +861,16 @@ export default function DashboardPage() {
                             className="rounded"
                             defaultChecked
                           />
-                          <span className="text-sm">Payment confirmations</span>
+                          <span className="text-xs">Payment confirmations</span>
                         </label>
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">
+                      <h4 className="font-medium text-gray-900 mb-1">
                         Language Preferences
                       </h4>
-                      <select className="w-full p-2 border rounded-md">
+                      <select className="w-full p-1 text-sm border rounded-md">
                         <option>English</option>
                         <option>Chinese (Simplified)</option>
                         <option>Chinese (Traditional)</option>
