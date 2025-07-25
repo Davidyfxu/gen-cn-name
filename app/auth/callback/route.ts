@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || requestUrl.origin;
 
   if (code) {
     const supabase = await createServerSupabaseClient();
@@ -12,12 +13,11 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Auth callback error:", error);
-      return NextResponse.redirect(`${requestUrl.origin}/auth/error`);
+      // 使用环境变量获取基础 URL，回退到 requestUrl.origin
+      return NextResponse.redirect(`${baseUrl}/auth/error`);
     }
-
-    console.log("Successfully exchanged code for session:", data.session?.user?.id);
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(`${requestUrl.origin}/dashboard`);
+  // 使用环境变量获取基础 URL，回退到 requestUrl.origin
+  return NextResponse.redirect(`${baseUrl}/dashboard`);
 }
