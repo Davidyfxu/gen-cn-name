@@ -1,20 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import * as crypto from "crypto";
+
+function verifyCreemSignature(
+  payload: string,
+  signature: string,
+  secret: string
+): boolean {
+  const computedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex");
+  return computedSignature === signature;
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const payload = await req.json();
-    console.info("webhook payload", payload, typeof payload);
-    // Verify webhook signature (if Creem.io provides one)
-    // const signature = req.headers.get('x-creem-signature');
+    // Get raw request body for signature verification
+    const rawBody = await req.text();
 
+    // Verify webhook signature
+    const signature = req.headers.get("creem-signature");
+    const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      console.error("CREEM_WEBHOOK_SECRET environment variable is not set");
+      return NextResponse.json(
+        { error: "Webhook secret not configured" },
+        { status: 500 }
+      );
+    }
+
+    if (!signature) {
+      console.error("Missing creem-signature header");
+      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+    }
+
+    if (!verifyCreemSignature(rawBody, signature, webhookSecret)) {
+      console.error("Invalid webhook signature");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+    }
+
+    // Parse JSON after signature verification
+    const payload = JSON.parse(rawBody);
     const { eventType, object } = payload;
-    console.log("payload valid var", eventType, object);
     const id = object.id;
     const userId = object?.metadata?.user_id;
 
     if (eventType === "checkout.completed") {
-      console.log(userId, id, "checkout completed");
       const supabase = await createServerSupabaseClient();
 
       // Find the payment record
@@ -23,7 +56,6 @@ export async function POST(req: NextRequest) {
         .select("*")
         .eq("creem_payment_id", id)
         .single();
-      console.log("1111", payment);
 
       if (paymentError || !payment) {
         console.error("Payment record not found:", id);
@@ -38,7 +70,6 @@ export async function POST(req: NextRequest) {
         .from("payments")
         .update({ status: "completed" })
         .eq("creem_payment_id", id);
-      console.log("222222");
       if (updatePaymentError) {
         console.error("Failed to update payment status:", updatePaymentError);
         return NextResponse.json(
@@ -53,7 +84,6 @@ export async function POST(req: NextRequest) {
         .select("*")
         .eq("id", userId)
         .single();
-      console.log("333333", user);
       if (userError || !user) {
         console.error("User not found for payment:", userId);
         return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -73,10 +103,6 @@ export async function POST(req: NextRequest) {
           { status: 500 }
         );
       }
-
-      console.log(
-        `Successfully added ${payment.credits_purchased} credits to user ${userId}`
-      );
     } else if (eventType === "checkout.failed") {
       const supabase = await createServerSupabaseClient();
 

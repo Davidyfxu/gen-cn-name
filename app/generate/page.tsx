@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { redirect } from "next/navigation";
-import {generateName, payment} from "@/app/api";
+import { generateName, payment } from "@/app/api";
 
 interface FormData {
   age: string;
@@ -49,7 +49,7 @@ interface ChatMessage {
 
 export default function GeneratePage() {
   const { user } = useAuth();
-  const { credits, isLoading } = useAppStore();
+  const { credits } = useAppStore();
 
   const [formData, setFormData] = useState<FormData>({
     age: "",
@@ -86,7 +86,7 @@ export default function GeneratePage() {
 
     setIsGenerating(true);
     try {
-      const result = await generateName({ type: "form", data: formData })
+      const result = await generateName({ type: "form", data: formData });
       setGeneratedName(result);
     } catch (error) {
       console.error("Generation failed:", error);
@@ -118,7 +118,7 @@ export default function GeneratePage() {
   const handlePurchase = async (creditAmount: number) => {
     setIsPurchasing(true);
     try {
-      const data = await payment({ credits: creditAmount })
+      const data = await payment({ credits: creditAmount });
       if (data?.checkout_url) {
         // Redirect to Creem.io checkout
         window.location.href = data?.checkout_url;

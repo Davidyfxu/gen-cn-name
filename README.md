@@ -83,6 +83,7 @@ A full-stack Next.js web application that generates personalized Chinese names f
    # Creem.io Payment
    CREEM_API_KEY=your_creem_api_key
    CREEM_PRODUCT_ID=your_creem_product_id
+   CREEM_WEBHOOK_SECRET=your_creem_webhook_secret
 
    # DeepSeek API
    DEEPSEEK_API_KEY=your_deepseek_api_key
@@ -141,7 +142,8 @@ See `ENVIRONMENT_SETUP.md` for detailed configuration.
 1. Create account at Creem.io
 2. Set up webhook endpoint: `/api/payment/webhook`
 3. Configure product with appropriate pricing
-4. Update environment variables
+4. Get your webhook secret from Developers > Webhook page
+5. Update environment variables
 
 ### Credit Packages
 

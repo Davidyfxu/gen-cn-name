@@ -45,13 +45,13 @@ export function Navigation() {
                 <nav className="flex items-center space-x-6 text-sm font-medium">
                   <Link
                     href="/generate"
-                    className="transition-colors hover:text-foreground/80 text-gray-600 hover:text-gray-900"
+                    className="transition-colors text-gray-600 hover:text-gray-900"
                   >
                     Generate
                   </Link>
                   <Link
                     href="/dashboard"
-                    className="transition-colors hover:text-foreground/80 text-gray-600 hover:text-gray-900"
+                    className="transition-colors text-gray-600 hover:text-gray-900"
                   >
                     Dashboard
                   </Link>
