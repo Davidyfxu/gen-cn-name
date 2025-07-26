@@ -62,7 +62,7 @@ export function Navigation() {
             {/* Center section - Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center space-x-2">
-                <span className="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="hidden sm:inline-block font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   ChineseName.ai
                 </span>
               </Link>
@@ -81,8 +81,8 @@ export function Navigation() {
                     >
                       <Avatar className="h-8 w-8">
                         {user.user_metadata?.avatar_url && (
-                          <AvatarImage 
-                            src={user.user_metadata.avatar_url} 
+                          <AvatarImage
+                            src={user.user_metadata.avatar_url}
                             alt="Avatar"
                           />
                         )}
@@ -128,11 +128,7 @@ export function Navigation() {
                 </DropdownMenu>
               ) : (
                 <>
-                  <Button
-                    variant="outline"
-                    onClick={openSignIn}
-                    className="hidden sm:inline-flex"
-                  >
+                  <Button variant="outline" onClick={openSignIn}>
                     Sign In
                   </Button>
                   <Button onClick={openSignUp}>Sign Up</Button>

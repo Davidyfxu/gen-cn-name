@@ -155,7 +155,11 @@ export default function Home() {
                     className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
                     onClick={handleGetStarted}
                   >
-                    Get Your Chinese Name - $5
+                    <span className="hidden sm:inline-block">
+                      Get Your Chinese Name -{" "}
+                    </span>
+                    <span className="sm:hidden">Get Name - </span>
+                    $5
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 )}
@@ -169,7 +173,8 @@ export default function Home() {
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
                 >
-                  Try Demo First
+                  <span className="hidden sm:inline-block">Try Demo First</span>
+                  <span className="sm:hidden">Try Demo</span>
                 </Button>
               </div>
               <div className="mt-8 flex items-center justify-center gap-8 text-sm text-gray-600">
@@ -633,7 +638,11 @@ export default function Home() {
                 className="text-lg px-8 py-6"
                 onClick={handleGetStarted}
               >
-                Get Started Now - $5
+                <span className="hidden sm:inline-block">
+                  Get Started Now -{" "}
+                </span>
+                <span className="sm:hidden">Start - </span>
+                $5
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             )}

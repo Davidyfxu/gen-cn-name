@@ -6,6 +6,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 interface CreditPurchaseProps {
   onPurchase: (credits: number) => void;
@@ -47,7 +48,12 @@ export function CreditPurchase({
   isPurchasing,
 }: CreditPurchaseProps) {
   return (
-    <Card>
+    <Card className="relative">
+      {isPurchasing && (
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-lg">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
       <CardHeader>
         <CardTitle>Purchase Credits</CardTitle>
         <CardDescription>
@@ -93,9 +99,8 @@ export function CreditPurchase({
                   className="w-full"
                   size="sm"
                   onClick={() => onPurchase(option.credits)}
-                  disabled={isPurchasing}
                 >
-                  {isPurchasing ? "Processing..." : "Purchase"}
+                  Purchase
                 </Button>
               </CardContent>
             </Card>
