@@ -12,7 +12,7 @@ const f = async (url: string, options: RequestInit = {}) => {
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, message: ${errorText}`,
+      `HTTP error! status: ${response.status}, message: ${errorText}`
     );
   }
 
@@ -26,12 +26,5 @@ export const payment = (data: any) =>
   });
 export const generateName = (data: any) =>
   f("/api/generate-name", {
-    body: JSON.stringify(data),
-  });
-export const creemCheckout = (data: any) =>
-  f(`${process.env.CREEM_API_URL!}/v1/checkouts`, {
-    headers: {
-      "x-api-key": process.env.CREEM_API_KEY!,
-    },
     body: JSON.stringify(data),
   });
