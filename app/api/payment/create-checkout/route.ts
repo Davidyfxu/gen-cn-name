@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { creemCheckout } from "@/app/api";
+import { stripe } from "@/lib/stripe";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export async function POST(req: NextRequest) {
@@ -40,43 +40,63 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Calculate pricing
+    // Calculate pricing (amounts in cents for Stripe)
     const pricing = {
-      1: 5.0,
-      5: 20.0, // $5 discount
-      10: 35.0, // $15 discount
+      1: 500, // $5.00
+      5: 2000, // $20.00 (Save $5)
+      10: 3500, // $35.00 (Save $15)
     };
 
-    const amount = pricing[credits as keyof typeof pricing];
-    // Create checkout with Creem.io
-    const creemData = await creemCheckout({
-      product_id: process.env.CREEM_PRODUCT_ID!,
-      customer: {
-        email: user.email,
-      },
+    const amountInCents = pricing[credits as keyof typeof pricing];
+    const amountInDollars = amountInCents / 100;
+
+    // Create Stripe Checkout Session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `${credits} Chinese Name Generation Credit${credits > 1 ? "s" : ""}`,
+              description: `Generate ${credits} unique Chinese name${credits > 1 ? "s" : ""} with meanings`,
+            },
+            unit_amount: amountInCents,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=cancelled`,
+      customer_email: user.email!,
       metadata: {
         user_id: user.id,
-        credits: credits,
-        amount: amount,
+        credits: credits.toString(),
+        amount: amountInDollars.toString(),
       },
     });
-    // Save payment record as pending
+
+    // Save payment record as pending (使用原有的creem_payment_id字段存储Stripe session ID)
     const { error: paymentError } = await supabase.from("payments").insert({
       user_id: user.id,
-      amount: amount,
+      amount: amountInDollars,
       credits_purchased: credits,
-      creem_payment_id: creemData.id,
+      creem_payment_id: session.id, // 继续使用原字段名，但存储Stripe session ID
       status: "pending",
     });
 
     if (paymentError) {
       console.error("Failed to save payment record:", paymentError);
+      return NextResponse.json(
+        { error: "Failed to save payment record" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
-      checkout_url: creemData.checkout_url,
-      checkout_id: creemData.id,
+      checkout_url: session.url,
+      checkout_id: session.id,
     });
   } catch (error) {
     console.error("Checkout creation error:", error);
