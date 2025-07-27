@@ -186,6 +186,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <script
+          defer
+          data-domain="chinesename.sinohub.best"
+          src="https://plausible.sinohub.best/js/script.js"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
