@@ -15,8 +15,6 @@ import { AuthModal } from "@/components/auth-modal";
 import { motion } from "framer-motion";
 import {
   Sparkles,
-  Heart,
-  Globe,
   Star,
   ArrowRight,
   Check,
@@ -30,11 +28,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
-import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 
-ChannelService.boot({
-  "pluginKey": "768b3c09-4470-44e2-b97d-b679e126ba8d", // fill your plugin key
-});
 export default function Home() {
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);

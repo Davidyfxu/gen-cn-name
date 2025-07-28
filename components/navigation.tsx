@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, LogOut } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthModal } from "@/components/auth-modal";
+import { channelIO } from "@/lib/channel";
 
 export function Navigation() {
   const { user, signOut, loading } = useAuth();
@@ -33,6 +34,10 @@ export function Navigation() {
     setAuthMode("signup");
     setShowAuthModal(true);
   };
+
+  useEffect(() => {
+    void channelIO();
+  }, []);
 
   return (
     <>
