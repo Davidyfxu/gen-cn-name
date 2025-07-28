@@ -4,6 +4,9 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
 import { Navigation } from "@/components/navigation";
 import { Toaster } from "@/components/ui/sonner";
+import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+
+ChannelService.loadScript()
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
