@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,8 +14,7 @@ import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
 import { CreditCard, History, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { Payment } from "@/lib/supabase";
-import { getUserData, payment } from "@/app/api";
+import { payment } from "@/app/api";
 
 // Import our new components
 import { StatsCards } from "@/components/dashboard/stats-cards";
@@ -24,33 +23,11 @@ import { PasswordChanger } from "@/components/dashboard/password-changer";
 import { GenerationHistory } from "@/components/dashboard/generation-history";
 import { CreditPurchase } from "@/components/dashboard/credit-purchase";
 import { PaymentHistory } from "@/components/dashboard/payment-history";
-import { UserPreferences } from "@/components/dashboard/user-preferences";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { credits, generations, setCredits, setGenerations } = useAppStore();
-  const [isLoading, setIsLoading] = useState(true);
+  const { credits, generations, payments, isLoading } = useAppStore();
   const [isPurchasing, setIsPurchasing] = useState(false);
-  const [payments, setPayments] = useState<Payment[]>([]);
-
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
-
-  const fetchUserData = async () => {
-    try {
-      const data = await getUserData();
-      setCredits(data.credits || 0);
-      setGenerations(data.generations || []);
-      setPayments(data.payments || []);
-    } catch (error) {
-      console.error("Failed to fetch user data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handlePurchase = async (creditAmount: number) => {
     setIsPurchasing(true);
@@ -140,24 +117,24 @@ export default function DashboardPage() {
             <TabsList className="grid w-full grid-cols-3 mb-2">
               <TabsTrigger
                 value="history"
-                className="flex items-center space-x-2"
+                className="flex items-center justify-center space-x-2"
               >
                 <History className="h-4 w-4" />
-                <span>Generation History</span>
+                <span className="hidden sm:inline">Generation History</span>
               </TabsTrigger>
               <TabsTrigger
                 value="credits"
-                className="flex items-center space-x-2"
+                className="flex items-center justify-center space-x-2"
               >
                 <CreditCard className="h-4 w-4" />
-                <span>Credits & Billing</span>
+                <span className="hidden sm:inline">Credits & Billing</span>
               </TabsTrigger>
               <TabsTrigger
                 value="settings"
-                className="flex items-center space-x-2"
+                className="flex items-center justify-center space-x-2"
               >
                 <Settings className="h-4 w-4" />
-                <span>Settings</span>
+                <span className="hidden sm:inline">Settings</span>
               </TabsTrigger>
             </TabsList>
 

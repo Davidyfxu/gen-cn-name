@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import { User, Session, AuthChangeEvent } from "@supabase/supabase-js";
+import { useAppStore } from "@/lib/store";
+import { getUserData } from "@/app/api";
 
 interface AuthContextType {
   user: User | null;
@@ -25,6 +27,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createBrowserSupabaseClient();
+  const { setUserData, setLoading: setStoreLoading } = useAppStore();
+
+  const fetchUserData = async () => {
+    try {
+      setStoreLoading(true);
+      const data = await getUserData();
+      setUserData(data);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    } finally {
+      setStoreLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Get initial session
@@ -35,6 +50,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // Fetch user data if authenticated
+      if (session?.user) {
+        await fetchUserData();
+      }
     };
 
     getSession();
@@ -47,6 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Fetch user data if authenticated, clear if not
+        if (session?.user) {
+          await fetchUserData();
+        } else {
+          // Clear user data when logged out
+          setUserData({ credits: 0, generations: [], payments: [] });
+        }
       }
     );
 

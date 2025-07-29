@@ -29,14 +29,19 @@ import {
   CreditCard,
   Loader2,
   ShoppingCart,
+  ChevronDown,
+  ChevronUp,
+  User,
+  UserCheck,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { redirect } from "next/navigation";
 import { generateName, payment } from "@/app/api";
 
 interface FormData {
-  age: string;
   name: string;
+  sex: string;
+  age: string;
   hobbies: string;
   expectations: string;
   chinaKnowledge: string;
@@ -52,13 +57,15 @@ export default function GeneratePage() {
   const { credits } = useAppStore();
 
   const [formData, setFormData] = useState<FormData>({
-    age: "",
     name: "",
+    sex: "",
+    age: "",
     hobbies: "",
     expectations: "",
     chinaKnowledge: "",
   });
 
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -250,104 +257,102 @@ export default function GeneratePage() {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Purchase Credits</DialogTitle>
-                    <DialogDescription>
-                      Choose how many credits you'd like to purchase. Each name
-                      generation costs 1 credit ($5).
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="space-y-4">
-                      <Card className="border-2 border-gray-200">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-lg">1 Credit</CardTitle>
-                          <div className="text-2xl font-bold">$5</div>
-                          <CardDescription className="text-xs">
-                            Perfect for trying it out
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-2">
-                          <Button
-                            className="w-full"
-                            onClick={() => handlePurchase(1)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Processing...
-                              </>
-                            ) : (
-                              "Purchase 1 Credit"
-                            )}
-                          </Button>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="border-2 border-indigo-200 bg-indigo-50">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-lg">5 Credits</CardTitle>
-                          <div className="text-2xl font-bold">$20</div>
-                          <CardDescription className="text-xs">
-                            <span className="line-through text-gray-500">
-                              $25
-                            </span>
-                            <span className="text-green-600 ml-1">
-                              Save $5!
-                            </span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-2">
-                          <Button
-                            className="w-full"
-                            onClick={() => handlePurchase(5)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Processing...
-                              </>
-                            ) : (
-                              "Purchase 5 Credits"
-                            )}
-                          </Button>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="border-2 border-purple-200 bg-purple-50">
-                        <CardHeader className="text-center pb-2">
-                          <CardTitle className="text-lg">10 Credits</CardTitle>
-                          <div className="text-2xl font-bold">$35</div>
-                          <CardDescription className="text-xs">
-                            <span className="line-through text-gray-500">
-                              $50
-                            </span>
-                            <span className="text-green-600 ml-1">
-                              Save $15!
-                            </span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-2">
-                          <Button
-                            className="w-full"
-                            onClick={() => handlePurchase(10)}
-                            disabled={isPurchasing}
-                          >
-                            {isPurchasing ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Processing...
-                              </>
-                            ) : (
-                              "Purchase 10 Credits"
-                            )}
-                          </Button>
-                        </CardContent>
-                      </Card>
+                  {isPurchasing ? (
+                    <div className="flex flex-col items-center justify-center p-8 space-y-4">
+                      <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+                      <div className="text-center space-y-2">
+                        <h3 className="text-lg font-medium">
+                          Processing Payment
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          Please wait while we redirect you to checkout...
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <DialogHeader>
+                        <DialogTitle>Purchase Credits</DialogTitle>
+                        <DialogDescription>
+                          Choose how many credits you'd like to purchase. Each
+                          name generation costs 1 credit ($5).
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="space-y-4">
+                          <Card className="border-2 border-gray-200 hover:border-gray-300 transition-colors">
+                            <CardHeader className="text-center pb-2">
+                              <CardTitle className="text-lg">
+                                1 Credit
+                              </CardTitle>
+                              <div className="text-2xl font-bold">$5</div>
+                              <CardDescription className="text-xs">
+                                Perfect for trying it out
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-2">
+                              <Button
+                                className="w-full"
+                                onClick={() => handlePurchase(1)}
+                              >
+                                Purchase 1 Credit
+                              </Button>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="border-2 border-indigo-200 bg-indigo-50 hover:border-indigo-300 transition-colors">
+                            <CardHeader className="text-center pb-2">
+                              <CardTitle className="text-lg">
+                                5 Credits
+                              </CardTitle>
+                              <div className="text-2xl font-bold">$20</div>
+                              <CardDescription className="text-xs">
+                                <span className="line-through text-gray-500">
+                                  $25
+                                </span>
+                                <span className="text-green-600 ml-1">
+                                  Save $5!
+                                </span>
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-2">
+                              <Button
+                                className="w-full"
+                                onClick={() => handlePurchase(5)}
+                              >
+                                Purchase 5 Credits
+                              </Button>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="border-2 border-purple-200 bg-purple-50 hover:border-purple-300 transition-colors">
+                            <CardHeader className="text-center pb-2">
+                              <CardTitle className="text-lg">
+                                10 Credits
+                              </CardTitle>
+                              <div className="text-2xl font-bold">$35</div>
+                              <CardDescription className="text-xs">
+                                <span className="line-through text-gray-500">
+                                  $50
+                                </span>
+                                <span className="text-green-600 ml-1">
+                                  Save $15!
+                                </span>
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-2">
+                              <Button
+                                className="w-full"
+                                onClick={() => handlePurchase(10)}
+                              >
+                                Purchase 10 Credits
+                              </Button>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </DialogContent>
               </Dialog>
             </CardContent>
@@ -355,13 +360,19 @@ export default function GeneratePage() {
         ) : (
           <Tabs defaultValue="form" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="form" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="form"
+                className="flex items-center justify-center space-x-2"
+              >
                 <FileText className="h-4 w-4" />
-                <span>Structured Form</span>
+                <span className="hidden sm:inline">Structured Form</span>
               </TabsTrigger>
-              <TabsTrigger value="chat" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="chat"
+                className="flex items-center justify-center space-x-2"
+              >
                 <MessageCircle className="h-4 w-4" />
-                <span>Natural Conversation</span>
+                <span className="hidden sm:inline">Natural Conversation</span>
               </TabsTrigger>
             </TabsList>
 
@@ -392,74 +403,141 @@ export default function GeneratePage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Age</label>
-                        <Input
-                          type="number"
-                          value={formData.age}
-                          onChange={(e) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              age: e.target.value,
-                            }))
-                          }
-                          placeholder="Your age"
-                          required
-                        />
+                        <label className="text-sm font-medium">
+                          Sex (Optional)
+                        </label>
+                        <div className="flex space-x-2">
+                          <Button
+                            type="button"
+                            variant={
+                              formData.sex === "male" ? "default" : "outline"
+                            }
+                            className="flex-1"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                sex: formData.sex === "male" ? "" : "male",
+                              }))
+                            }
+                          >
+                            <User className="mr-2 h-4 w-4" />
+                            Male
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={
+                              formData.sex === "female" ? "default" : "outline"
+                            }
+                            className="flex-1"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                sex: formData.sex === "female" ? "" : "female",
+                              }))
+                            }
+                          >
+                            <UserCheck className="mr-2 h-4 w-4" />
+                            Female
+                          </Button>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">
-                        Hobbies & Interests
-                      </label>
-                      <Textarea
-                        value={formData.hobbies}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            hobbies: e.target.value,
-                          }))
+                    {/* Advanced Options */}
+                    <div className="space-y-4">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full flex items-center justify-between p-4 border rounded-lg"
+                        onClick={() =>
+                          setShowAdvancedOptions(!showAdvancedOptions)
                         }
-                        placeholder="What do you enjoy doing? (e.g., reading, traveling, music, sports)"
-                        rows={3}
-                        required
-                      />
-                    </div>
+                      >
+                        <span className="text-sm font-medium">
+                          Advanced Options
+                        </span>
+                        {showAdvancedOptions ? (
+                          <ChevronUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4" />
+                        )}
+                      </Button>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">
-                        Expectations & Aspirations
-                      </label>
-                      <Textarea
-                        value={formData.expectations}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            expectations: e.target.value,
-                          }))
-                        }
-                        placeholder="What qualities would you like your Chinese name to represent? What are your life goals?"
-                        rows={3}
-                        required
-                      />
-                    </div>
+                      {showAdvancedOptions && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="space-y-6"
+                        >
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Age</label>
+                            <Input
+                              type="number"
+                              value={formData.age}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  age: e.target.value,
+                                }))
+                              }
+                              placeholder="Your age"
+                            />
+                          </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">
-                        Knowledge of China
-                      </label>
-                      <Textarea
-                        value={formData.chinaKnowledge}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            chinaKnowledge: e.target.value,
-                          }))
-                        }
-                        placeholder="Tell us about your connection to or knowledge of Chinese culture"
-                        rows={3}
-                        required
-                      />
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">
+                              Hobbies & Interests
+                            </label>
+                            <Textarea
+                              value={formData.hobbies}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  hobbies: e.target.value,
+                                }))
+                              }
+                              placeholder="What do you enjoy doing? (e.g., reading, traveling, music, sports)"
+                              rows={3}
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">
+                              Expectations & Aspirations
+                            </label>
+                            <Textarea
+                              value={formData.expectations}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  expectations: e.target.value,
+                                }))
+                              }
+                              placeholder="What qualities would you like your Chinese name to represent? What are your life goals?"
+                              rows={3}
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">
+                              Knowledge of China
+                            </label>
+                            <Textarea
+                              value={formData.chinaKnowledge}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  chinaKnowledge: e.target.value,
+                                }))
+                              }
+                              placeholder="Tell us about your connection to or knowledge of Chinese culture"
+                              rows={3}
+                            />
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
 
                     <Button
