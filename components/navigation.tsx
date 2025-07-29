@@ -19,7 +19,9 @@ import { channelIO } from "@/lib/channel";
 export function Navigation() {
   const { user, signOut, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [authMode, setAuthMode] = useState<
+    "signin" | "signup" | "forgot-password"
+  >("signin");
 
   const handleSignOut = async () => {
     await signOut();
@@ -148,7 +150,9 @@ export function Navigation() {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         mode={authMode}
-        onSwitchMode={(mode: "signin" | "signup") => setAuthMode(mode)}
+        onSwitchMode={(mode: "signin" | "signup" | "forgot-password") =>
+          setAuthMode(mode)
+        }
       />
     </>
   );

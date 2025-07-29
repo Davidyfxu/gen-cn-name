@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-// 初始化 OpenAI 客户端，配置为使用 DeepSeek API
+// Initialize OpenAI client, configured to use DeepSeek API
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   baseURL: process.env.OPENAI_PROXY_URL,
@@ -124,10 +124,10 @@ Format the response as JSON with these fields: chinese_name, pinyin, traditional
           throw new Error("No content received from AI");
         }
 
-        // 清理内容，移除可能的 markdown 代码块标记
+        // Clean content, remove possible markdown code block markers
         let cleanContent = content.trim();
 
-        // 移除 ```json 开头和 ``` 结尾
+        // Remove ```json prefix and ``` suffix
         if (cleanContent.startsWith("```json")) {
           cleanContent = cleanContent.replace(/^```json\s*/, "");
         }
@@ -138,7 +138,7 @@ Format the response as JSON with these fields: chinese_name, pinyin, traditional
           cleanContent = cleanContent.replace(/\s*```$/, "");
         }
 
-        // 尝试提取JSON部分（如果还有其他文本）
+        // Try to extract JSON part (if there's other text)
         const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           cleanContent = jsonMatch[0];

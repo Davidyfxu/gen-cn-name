@@ -18,6 +18,7 @@ interface AuthContextType {
   ) => Promise<{ error: any }>;
   signInWithGoogle: () => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -99,11 +100,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
       },
     });
+
+    // Check if the error indicates user already exists
+    if (error) {
+      if (
+        error.message.toLowerCase().includes("already registered") ||
+        error.message.toLowerCase().includes("already exists") ||
+        error.message.toLowerCase().includes("user already exists")
+      ) {
+        return {
+          error: {
+            message:
+              "An account with this email already exists. Please try signing in instead.",
+          },
+        };
+      }
+    }
+
     return { error };
   };
 
   const signInWithGoogle = async () => {
-    // 使用环境变量获取基础 URL，回退到当前位置
+    // Use environment variable to get base URL, fallback to current location
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -119,6 +137,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
+  const resetPassword = async (email: string) => {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${baseUrl}/auth/callback?next=/auth/reset-password&type=recovery`,
+    });
+    return { error };
+  };
+
   const value = {
     user,
     session,
@@ -127,6 +153,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signInWithGoogle,
     signOut,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
