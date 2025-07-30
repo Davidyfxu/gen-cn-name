@@ -5,6 +5,7 @@ import { createBrowserSupabaseClient } from "@/lib/supabase";
 import { User, Session, AuthChangeEvent } from "@supabase/supabase-js";
 import { useAppStore } from "@/lib/store";
 import { getUserData } from "@/app/api";
+import { isBoolean } from "lodash-es";
 
 interface AuthContextType {
   user: User | null;
@@ -14,7 +15,7 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    fullName?: string
+    fullName?: string,
   ) => Promise<{ error: any }>;
   signInWithGoogle: () => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
@@ -42,24 +43,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Get initial session
+  const getSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    setSession(session);
+    setUser(session?.user ?? null);
+    setLoading(false);
+
+    // Fetch user data if authenticated
+    if (session?.user) {
+      await fetchUserData();
+    }
+  };
+
   useEffect(() => {
-    // Get initial session
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-
-      // Fetch user data if authenticated
-      if (session?.user) {
-        await fetchUserData();
-      }
-    };
-
-    getSession();
-
+    void getSession();
     // Listen for auth changes
     const {
       data: { subscription },
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Clear user data when logged out
           setUserData({ credits: 0, generations: [], payments: [] });
         }
-      }
+      },
     );
 
     return () => subscription.unsubscribe();
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -101,20 +101,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
 
+    const isValidUser = data?.user?.user_metadata?.email_verified;
     // Check if the error indicates user already exists
-    if (error) {
-      if (
-        error.message.toLowerCase().includes("already registered") ||
-        error.message.toLowerCase().includes("already exists") ||
-        error.message.toLowerCase().includes("user already exists")
-      ) {
-        return {
-          error: {
-            message:
-              "An account with this email already exists. Please try signing in instead.",
-          },
-        };
-      }
+    if (!isBoolean(isValidUser) || !data?.user?.identities) {
+      return {
+        error: {
+          message:
+            "An account with this email already exists. Please try signing in instead.",
+        },
+      };
     }
 
     return { error };

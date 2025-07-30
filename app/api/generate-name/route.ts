@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     if (user.credits < 1) {
       return NextResponse.json(
         { error: "Insufficient credits" },
-        { status: 402 }
+        { status: 402 },
       );
     }
 
@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
 
       prompt = `Create a personalized Chinese name for someone with these details:
 Name: ${data.name}
+Sex: ${data.sex}
 Age: ${data.age}
 Hobbies: ${data.hobbies}
 Expectations/Aspirations: ${data.expectations}
@@ -78,7 +79,7 @@ Format the response as JSON with these fields: chinese_name, pinyin, traditional
       const conversation = data
         .map(
           (msg: any) =>
-            `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`
+            `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`,
         )
         .join("\n");
 
@@ -191,14 +192,14 @@ Format the response as JSON with these fields: chinese_name, pinyin, traditional
           details:
             aiError instanceof Error ? aiError.message : "Unknown AI error",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
     console.error("Generation error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

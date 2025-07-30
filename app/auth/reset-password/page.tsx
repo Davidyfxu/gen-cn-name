@@ -43,7 +43,7 @@ function ResetPasswordForm() {
   // Confirm password validation
   const validateConfirmPassword = (
     confirmPassword: string,
-    password: string
+    password: string,
   ) => {
     if (!confirmPassword) {
       setConfirmPasswordError("Please confirm your password");
@@ -113,7 +113,7 @@ function ResetPasswordForm() {
       }
     };
 
-    handleAuthCallback();
+    void handleAuthCallback();
   }, [supabase.auth, searchParams]);
 
   const handlePasswordReset = async (e: React.FormEvent) => {
@@ -123,7 +123,7 @@ function ResetPasswordForm() {
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = validateConfirmPassword(
       confirmPassword,
-      password
+      password,
     );
 
     if (!isPasswordValid || !isConfirmPasswordValid) {
@@ -140,18 +140,18 @@ function ResetPasswordForm() {
       if (error) {
         if (error.message.toLowerCase().includes("same as")) {
           toast.error(
-            "New password must be different from your current password"
+            "New password must be different from your current password",
           );
         } else if (error.message.toLowerCase().includes("weak")) {
           toast.error(
-            "Password is too weak. Please choose a stronger password"
+            "Password is too weak. Please choose a stronger password",
           );
         } else {
           toast.error(error.message || "Failed to update password");
         }
       } else {
         toast.success(
-          "Password updated successfully! Redirecting to dashboard..."
+          "Password updated successfully! Redirecting to dashboard...",
         );
         // Small delay to show success message before redirect
         setTimeout(() => {
