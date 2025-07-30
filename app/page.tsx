@@ -105,7 +105,11 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Enhanced Hero Section */}
-      <section className="relative overflow-hidden py-12 sm:py-16">
+      <section
+        className="relative overflow-hidden py-12 sm:py-16"
+        itemScope
+        itemType="https://schema.org/SoftwareApplication"
+      >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
@@ -119,14 +123,20 @@ export default function Home() {
                   🎉 Your first Chinese name is FREE • Trusted by 50,000+ people
                 </div>
               </div>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-7xl">
+              <h1
+                className="text-4xl font-bold tracking-tight text-gray-900 sm:text-7xl"
+                itemProp="name"
+              >
                 Get Your Perfect{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                   Chinese Name
                 </span>{" "}
                 in Minutes
               </h1>
-              <p className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
+              <p
+                className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto"
+                itemProp="description"
+              >
                 Our AI creates authentic Chinese names with deep cultural
                 meaning, perfect pronunciation guides, and beautiful
                 calligraphy. Trusted by expats, students, and professionals
@@ -199,15 +209,23 @@ export default function Home() {
       </section>
 
       {/* Demo Section with Login Requirement */}
-      <section id="demo" className="py-12 bg-gray-50">
+      <section
+        id="demo"
+        className="py-12 bg-gray-50"
+        aria-labelledby="demo-heading"
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-8">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Try It Now - See How It Works
+            <h2
+              id="demo-heading"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Try Our Free Chinese Name Generator - See How It Works
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              Experience our AI-powered name generation with a quick demo. Just
-              enter your basic info to see the magic happen.
+              Experience our AI-powered Chinese name generation with a quick
+              demo. Just enter your basic info to see the magic happen - your
+              first Chinese name is completely free!
             </p>
           </div>
 
@@ -282,15 +300,18 @@ export default function Home() {
       </section>
 
       {/* Enhanced Features Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16" aria-labelledby="features-heading">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Why 50,000+ People Choose ChineseName.best
+            <h2
+              id="features-heading"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Why 50,000+ People Choose Our AI Chinese Name Generator
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               The most advanced AI system for creating meaningful Chinese names
-              with authentic cultural heritage
+              with authentic cultural heritage and perfect pronunciation guides
             </p>
           </div>
 
@@ -306,7 +327,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100">
-                      <Sparkles className="h-7 w-7 text-indigo-600" />
+                      <Sparkles
+                        className="h-7 w-7 text-indigo-600"
+                        aria-label="AI-powered authenticity icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">
                       AI-Powered Authenticity
@@ -325,7 +349,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
-                      <BookOpen className="h-7 w-7 text-purple-600" />
+                      <BookOpen
+                        className="h-7 w-7 text-purple-600"
+                        aria-label="Cultural insights icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">
                       Deep Cultural Insights
@@ -344,7 +371,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-                      <Music className="h-7 w-7 text-green-600" />
+                      <Music
+                        className="h-7 w-7 text-green-600"
+                        aria-label="Pronunciation guide icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">
                       Perfect Pronunciation
@@ -363,7 +393,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100">
-                      <Users className="h-7 w-7 text-orange-600" />
+                      <Users
+                        className="h-7 w-7 text-orange-600"
+                        aria-label="Personal story integration icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">
                       Personal Story Integration
@@ -382,7 +415,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-                      <Palette className="h-7 w-7 text-blue-600" />
+                      <Palette
+                        className="h-7 w-7 text-blue-600"
+                        aria-label="Chinese calligraphy icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">
                       Beautiful Calligraphy
@@ -401,7 +437,10 @@ export default function Home() {
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-rose-100">
-                      <Award className="h-7 w-7 text-rose-600" />
+                      <Award
+                        className="h-7 w-7 text-rose-600"
+                        aria-label="Lifetime access icon"
+                      />
                     </div>
                     <CardTitle className="text-xl">Lifetime Access</CardTitle>
                   </div>
@@ -419,14 +458,21 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-gray-50 py-12 sm:py-16">
+      <section
+        className="bg-gray-50 py-12 sm:py-16"
+        aria-labelledby="testimonials-heading"
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Loved by People Worldwide
+            <h2
+              id="testimonials-heading"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Real Reviews from Chinese Name Generator Users Worldwide
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              See what our users say about their Chinese name journey
+              See what our users say about their Chinese name journey and
+              cultural discovery
             </p>
           </div>
 
@@ -468,15 +514,22 @@ export default function Home() {
       </section>
 
       {/* Enhanced Pricing Section */}
-      <section className="bg-gray-50 py-12 sm:py-16">
+      <section
+        className="bg-gray-50 py-12 sm:py-16"
+        aria-labelledby="pricing-heading"
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Simple, Transparent Pricing
+            <h2
+              id="pricing-heading"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Chinese Name Generator Pricing - First Name Free
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              Get your first Chinese name free, then choose the plan that works
-              for you
+              Get your first authentic Chinese name completely free, then choose
+              the plan that works for you. No hidden fees, lifetime access
+              included.
             </p>
             <div className="mt-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm text-green-700 font-medium">
               🎉 First Chinese name generation is completely FREE!
@@ -704,14 +757,21 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 sm:py-16 bg-white">
+      <section
+        className="py-12 sm:py-16 bg-white"
+        aria-labelledby="faq-heading"
+      >
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-10">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Frequently Asked Questions
+            <h2
+              id="faq-heading"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >
+              Chinese Name Generator FAQ - Common Questions Answered
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              Everything you need to know about getting your Chinese name
+              Everything you need to know about getting your authentic Chinese
+              name with cultural meanings
             </p>
           </div>
 
@@ -755,15 +815,21 @@ export default function Home() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative isolate overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-12 sm:py-16 lg:px-8">
+      <section
+        className="relative isolate overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-12 sm:py-16 lg:px-8"
+        aria-labelledby="cta-heading"
+      >
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Ready to get your FREE Chinese name?
+          <h2
+            id="cta-heading"
+            className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
+          >
+            Ready to Get Your FREE Chinese Name with Cultural Meaning?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-indigo-100">
             Start completely free! Join over 50,000 people who have discovered
-            their perfect Chinese name with authentic cultural significance and
-            personal meaning.
+            their perfect Chinese name with authentic cultural significance,
+            pronunciation guides, and personal meaning.
           </p>
           <div className="mt-8 flex items-center justify-center gap-x-6">
             {user ? (

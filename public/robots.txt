@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Disallow admin/auth pages
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+
+# Allow important pages
+Allow: /generate
+Allow: /
+
+# Sitemap
+Sitemap: https://chinesename.sinohub.best/sitemap.xml
+
+# Crawl-delay (optional, helps with server load)
+Crawl-delay: 1
