@@ -151,7 +151,7 @@ export function ButtonSaying({
     <Button
       onClick={handleSpeak}
       disabled={disabled || !isSupported || !text.trim()}
-      className={cn(isSpeaking && "animate-pulse", className)}
+      className={cn(isSpeaking && "animate-pulse-strong", className)}
       {...props}
     >
       {children || (isSpeaking ? speakingText : defaultText)}
