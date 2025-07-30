@@ -105,7 +105,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Enhanced Hero Section */}
-      <section className="relative overflow-hidden py-20 sm:py-32">
+      <section className="relative overflow-hidden py-12 sm:py-16">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
@@ -115,8 +115,8 @@ export default function Home() {
               transition={{ duration: 0.8 }}
             >
               <div className="mb-6 flex justify-center">
-                <div className="rounded-full bg-indigo-100 px-4 py-2 text-sm text-indigo-700 font-medium">
-                  ✨ Trusted by 50,000+ people worldwide
+                <div className="rounded-full bg-green-100 px-4 py-2 text-sm text-green-700 font-medium">
+                  🎉 Your first Chinese name is FREE • Trusted by 50,000+ people
                 </div>
               </div>
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-7xl">
@@ -126,13 +126,13 @@ export default function Home() {
                 </span>{" "}
                 in Minutes
               </h1>
-              <p className="mt-8 text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
+              <p className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
                 Our AI creates authentic Chinese names with deep cultural
                 meaning, perfect pronunciation guides, and beautiful
                 calligraphy. Trusted by expats, students, and professionals
                 across 50+ countries.
               </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6 flex-wrap">
+              <div className="mt-8 flex items-center justify-center gap-x-6 flex-wrap">
                 {loading ? (
                   <Button size="lg" className="text-lg px-8 py-6" disabled>
                     Loading...
@@ -140,25 +140,29 @@ export default function Home() {
                 ) : user ? (
                   <Link href="/generate">
                     <Button
+                      variant="ghost"
                       size="lg"
-                      className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                      className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
                     >
-                      Generate Your Name Now
+                      <span className="hidden sm:inline-block">
+                        Get Your FREE Name Now
+                      </span>
+                      <span className="sm:hidden">Get FREE Name</span>
                       <Sparkles className="ml-2 h-5 w-5" />
                     </Button>
                   </Link>
                 ) : (
                   <Button
+                    variant="ghost"
                     size="lg"
-                    className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                    className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
                     onClick={handleGetStarted}
                   >
                     <span className="hidden sm:inline-block">
-                      Get Your Chinese Name -{" "}
+                      Get Your FREE Chinese Name
                     </span>
-                    <span className="sm:hidden">Get Name - </span>
-                    $5
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <span className="sm:hidden">Get FREE Name</span>
+                    <ArrowRight className="h-5 w-5" />
                   </Button>
                 )}
                 <Button
@@ -175,7 +179,7 @@ export default function Home() {
                   <span className="sm:hidden">Try Demo</span>
                 </Button>
               </div>
-              <div className="mt-8 flex items-center justify-center gap-8 text-sm text-gray-600">
+              <div className="mt-6 flex items-center justify-center gap-8 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-500" />
                   <span>Instant delivery</span>
@@ -195,13 +199,13 @@ export default function Home() {
       </section>
 
       {/* Demo Section with Login Requirement */}
-      <section id="demo" className="py-24 bg-gray-50">
+      <section id="demo" className="py-12 bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-16">
+          <div className="mx-auto max-w-2xl text-center mb-8">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Try It Now - See How It Works
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-gray-600">
               Experience our AI-powered name generation with a quick demo. Just
               enter your basic info to see the magic happen.
             </p>
@@ -245,11 +249,14 @@ export default function Home() {
 
                   <div className="text-center">
                     <Button
+                      variant="ghost"
                       onClick={handleDemoGenerate}
-                      className="w-full text-lg py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                      className="w-full text-lg py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
                       disabled={!demoName.trim() || !demoAge.trim()}
                     >
-                      {user ? "Generate My Name" : "Generate (Login Required)"}
+                      {user
+                        ? "Generate My FREE Name"
+                        : "Generate FREE (Login Required)"}
                       <Sparkles className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
@@ -275,21 +282,21 @@ export default function Home() {
       </section>
 
       {/* Enhanced Features Section */}
-      <section className="py-24 sm:py-32">
+      <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Why 50,000+ People Choose ChineseName.best
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-gray-600">
               The most advanced AI system for creating meaningful Chinese names
               with authentic cultural heritage
             </p>
           </div>
 
-          <div className="mx-auto mt-16 max-w-6xl">
+          <div className="mx-auto mt-10 max-w-6xl">
             <motion.div
-              className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -308,9 +315,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
-                    Our advanced AI analyzes 50,000+ traditional Chinese names,
-                    cultural patterns, and meanings to create names that are
-                    both authentic and personally meaningful.
+                    Advanced AI analyzes 50,000+ traditional names to create
+                    authentic, personally meaningful Chinese names.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -328,9 +334,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
-                    Every name includes detailed explanations of cultural
-                    significance, historical context, and traditional meanings -
-                    not just translations.
+                    Detailed cultural significance, historical context, and
+                    traditional meanings - not just translations.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -348,9 +353,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
-                    Complete pinyin guide with tone marks, audio pronunciation,
-                    and tips for correct intonation. Sound like a native speaker
-                    from day one.
+                    Complete pinyin guide with tone marks and audio. Learn to
+                    pronounce like a native speaker.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -368,9 +372,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
-                    Names reflect your unique personality, hobbies, dreams, and
-                    life goals. Each character is chosen to represent who you
-                    truly are.
+                    Names reflect your personality, hobbies, and dreams. Each
+                    character represents who you truly are.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -389,7 +392,7 @@ export default function Home() {
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
                     Traditional and simplified characters with stroke order
-                    guides. Perfect for learning to write your name beautifully.
+                    guides for beautiful writing.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -405,9 +408,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
-                    Your name and its complete cultural profile are saved
-                    forever. Download certificates, share with friends, and
-                    access anytime.
+                    Your name and cultural profile saved forever. Download
+                    certificates and access anytime.
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -417,19 +419,19 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-gray-50 py-24 sm:py-32">
+      <section className="bg-gray-50 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Loved by People Worldwide
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-gray-600">
               See what our users say about their Chinese name journey
             </p>
           </div>
 
           <motion.div
-            className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+            className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-6 lg:mx-0 lg:max-w-none lg:grid-cols-3"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -466,108 +468,255 @@ export default function Home() {
       </section>
 
       {/* Enhanced Pricing Section */}
-      <section className="bg-gray-50 py-24 sm:py-32">
+      <section className="bg-gray-50 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Simple, Transparent Pricing
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Get a personalized Chinese name with detailed cultural
-              interpretation
+            <p className="mt-4 text-lg leading-8 text-gray-600">
+              Get your first Chinese name free, then choose the plan that works
+              for you
             </p>
+            <div className="mt-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm text-green-700 font-medium">
+              🎉 First Chinese name generation is completely FREE!
+            </div>
           </div>
 
           <motion.div
-            className="mx-auto mt-16 max-w-md"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            className="mx-auto mt-10 max-w-6xl"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <Card className="relative border-2 border-indigo-200 shadow-xl">
-              <CardHeader className="text-center">
-                <div className="flex items-center justify-center space-x-2">
-                  <Star className="h-6 w-6 text-yellow-500" />
-                  <CardTitle className="text-2xl">
-                    Premium Name Generation
-                  </CardTitle>
-                  <Star className="h-6 w-6 text-yellow-500" />
+            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+              {/* Free + Single Name Combined */}
+              <Card className="relative border-2 border-green-200 shadow-xl bg-green-50 h-full flex flex-col">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                    START HERE
+                  </span>
                 </div>
-                <div className="mt-4">
-                  <span className="text-5xl font-bold text-gray-900">$5</span>
-                  <span className="text-lg text-gray-600">/name</span>
-                </div>
-                <CardDescription className="text-base">
-                  Complete name package with cultural insights
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Personalized Chinese name</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Pinyin pronunciation guide</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Traditional & Simplified characters</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Detailed cultural meaning</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Historical significance</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span>Lifetime access to your name</span>
-                  </div>
-                </div>
+                <CardHeader className="text-center pt-8 pb-6 flex-shrink-0">
+                  <CardTitle className="text-xl mb-4">Get Started</CardTitle>
 
-                <div className="pt-6">
-                  {user ? (
-                    <Link href="/generate">
-                      <Button className="w-full text-lg py-6">
-                        Generate Name
-                        <Sparkles className="ml-2 h-5 w-5" />
+                  {/* Main pricing display */}
+                  <div className="mb-4">
+                    <div className="text-4xl font-bold text-gray-900 mb-1">
+                      $0
+                      <span className="text-xl text-gray-600">/first name</span>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-4">
+                      Try it completely free
+                    </div>
+                  </div>
+
+                  {/* Additional names pricing - smaller and subdued */}
+                  <div className="text-xs text-gray-500">
+                    Additional names: $5 each
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3 flex-grow flex flex-col">
+                  <div className="space-y-2 text-sm flex-grow">
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>1st Chinese name completely FREE</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Pinyin pronunciation guide</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Cultural meaning & significance</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Traditional & Simplified characters</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Lifetime access</span>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-auto">
+                    {user ? (
+                      <Link href="/generate">
+                        <Button className="w-full bg-green-600 hover:bg-green-700">
+                          Start Free
+                          <Sparkles className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        className="w-full bg-green-600 hover:bg-green-700"
+                        onClick={handleGetStarted}
+                      >
+                        Start Free
+                        <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      className="w-full text-lg py-6"
-                      onClick={handleGetStarted}
-                    >
-                      Start Now
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  )}
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 5 Credits */}
+              <Card className="relative border-2 border-indigo-200 shadow-xl bg-indigo-50 h-full flex flex-col">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                    POPULAR
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
+                <CardHeader className="text-center pt-8 pb-6 flex-shrink-0">
+                  <CardTitle className="text-xl mb-4">5 Names Bundle</CardTitle>
+                  <div className="mb-4">
+                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                      $20
+                    </div>
+                    <div className="text-sm text-gray-600 mb-2">
+                      <span className="line-through">$25</span>
+                      <span className="text-green-600 ml-1 font-medium">
+                        Save $5!
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Great for exploring options
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3 flex-grow flex flex-col">
+                  <div className="space-y-2 text-sm flex-grow">
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>5 Chinese names</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>All premium features</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>$4 per name (20% off)</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Cultural meaning & significance</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Lifetime access</span>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-auto">
+                    {user ? (
+                      <Link href="/generate">
+                        <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                          Purchase
+                          <Sparkles className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        className="w-full bg-indigo-600 hover:bg-indigo-700"
+                        onClick={handleGetStarted}
+                      >
+                        Get Started
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 10 Credits */}
+              <Card className="relative border-2 border-purple-200 shadow-xl bg-purple-50 h-full flex flex-col">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                    BEST VALUE
+                  </span>
+                </div>
+                <CardHeader className="text-center pt-8 pb-6 flex-shrink-0">
+                  <CardTitle className="text-xl mb-4">
+                    10 Names Bundle
+                  </CardTitle>
+                  <div className="mb-4">
+                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                      $35
+                    </div>
+                    <div className="text-sm text-gray-600 mb-2">
+                      <span className="line-through">$50</span>
+                      <span className="text-green-600 ml-1 font-medium">
+                        Save $15!
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Maximum savings & flexibility
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3 flex-grow flex flex-col">
+                  <div className="space-y-2 text-sm flex-grow">
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>10 Chinese names</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>All premium features</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>$3.50 per name (30% off)</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Cultural meaning & significance</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>Lifetime access</span>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-auto">
+                    {user ? (
+                      <Link href="/generate">
+                        <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                          Purchase
+                          <Sparkles className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        className="w-full bg-purple-600 hover:bg-purple-700"
+                        onClick={handleGetStarted}
+                      >
+                        Get Started
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-16">
+          <div className="mx-auto max-w-2xl text-center mb-10">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Frequently Asked Questions
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-gray-600">
               Everything you need to know about getting your Chinese name
             </p>
           </div>
 
           <motion.div
-            className="space-y-4"
+            className="space-y-3"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -606,16 +755,17 @@ export default function Home() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative isolate overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-24 sm:py-32 lg:px-8">
+      <section className="relative isolate overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-12 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Ready to discover your perfect Chinese name?
+            Ready to get your FREE Chinese name?
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-indigo-100">
-            Join over 50,000 people who have found their perfect Chinese name
-            with authentic cultural significance and personal meaning.
+          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-indigo-100">
+            Start completely free! Join over 50,000 people who have discovered
+            their perfect Chinese name with authentic cultural significance and
+            personal meaning.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
+          <div className="mt-8 flex items-center justify-center gap-x-6">
             {user ? (
               <Link href="/generate">
                 <Button
@@ -623,7 +773,7 @@ export default function Home() {
                   size="lg"
                   className="text-lg px-8 py-6"
                 >
-                  Generate Your Name Now
+                  Get Your FREE Name Now
                   <Sparkles className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -634,16 +784,12 @@ export default function Home() {
                 className="text-lg px-8 py-6"
                 onClick={handleGetStarted}
               >
-                <span className="hidden sm:inline-block">
-                  Get Started Now -{" "}
-                </span>
-                <span className="sm:hidden">Start - </span>
-                $5
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <span>Start FREE Now</span>
+                <ArrowRight className="h-5 w-5" />
               </Button>
             )}
           </div>
-          <div className="mt-8 flex items-center justify-center gap-8 text-sm text-indigo-200">
+          <div className="mt-6 flex items-center justify-center gap-8 text-sm text-indigo-200">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               <span>50,000+ happy users</span>
