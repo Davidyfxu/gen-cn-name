@@ -1,4 +1,4 @@
-# ChineseName.ai 🇨🇳✨
+# ChineseName.best 🇨🇳✨
 
 A full-stack Next.js web application that generates personalized Chinese names for foreigners using AI, complete with cultural meanings and significance.
 
@@ -267,7 +267,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 
 - Create an issue in this repository
-- Contact us at support@chinesename.ai
+- Contact us at support@chinesename.best
 - Join our Discord community
 
 ---

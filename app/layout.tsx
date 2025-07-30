@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ChineseName.ai - AI-Powered Chinese Name Generator",
+  title: "ChineseName.best - AI-Powered Chinese Name Generator",
   description:
     "Generate personalized Chinese names with cultural meanings using AI. Perfect for foreigners looking for authentic Chinese names.",
   keywords:

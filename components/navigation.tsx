@@ -70,7 +70,7 @@ export function Navigation() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center space-x-2">
                 <span className="hidden sm:inline-block font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  ChineseName.ai
+                  ChineseName.best
                 </span>
               </Link>
             </div>

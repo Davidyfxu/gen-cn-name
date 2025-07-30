@@ -1,4 +1,4 @@
--- ChineseName.ai Database Schema
+-- chinesename.best Database Schema
 -- Run this in Supabase SQL Editor
 
 -- Create users table (leveraging Supabase auth.users)
