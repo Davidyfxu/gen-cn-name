@@ -272,9 +272,7 @@ export default function Home() {
                       className="w-full text-lg py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
                       disabled={!demoName.trim() || !demoAge.trim()}
                     >
-                      {user
-                        ? "Generate My FREE Name"
-                        : "Generate FREE (Login Required)"}
+                      Generate My FREE Name
                       <Sparkles className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
