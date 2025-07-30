@@ -6,9 +6,10 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Plus } from "lucide-react";
+import { Sparkles, Plus, Volume2 } from "lucide-react";
 import { NameGeneration } from "@/lib/supabase";
 import Link from "next/link";
+import { ButtonSaying } from "@/components/button-saying";
 
 interface GenerationHistoryProps {
   generations: NameGeneration[];
@@ -59,13 +60,26 @@ export function GenerationHistory({ generations }: GenerationHistoryProps) {
               >
                 <CardContent>
                   <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-indigo-600">
-                        {generation.generated_name.chinese_name}
-                      </h3>
-                      <p className="text-base text-gray-600">
-                        {generation.generated_name.pinyin}
-                      </p>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="text-xl font-bold text-indigo-600">
+                          {generation.generated_name.chinese_name}
+                        </h3>
+                        <ButtonSaying
+                          text={generation.generated_name.chinese_name}
+                          lang="zh-CN"
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs px-2 py-1 h-6 w-6"
+                        >
+                          <Volume2 className="h-3 w-3" />
+                        </ButtonSaying>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="text-base text-gray-600">
+                          {generation.generated_name.pinyin}
+                        </p>
+                      </div>
                       {generation.generated_name.traditional && (
                         <p className="text-xs text-gray-500">
                           Traditional: {generation.generated_name.traditional}

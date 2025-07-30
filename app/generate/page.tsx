@@ -33,10 +33,12 @@ import {
   ChevronUp,
   User,
   UserCheck,
+  Volume2,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { redirect } from "next/navigation";
 import { generateName, payment } from "@/app/api";
+import { ButtonSaying } from "@/components/button-saying";
 
 interface FormData {
   name: string;
@@ -162,8 +164,21 @@ export default function GeneratePage() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="text-center space-y-4">
-                <div className="text-6xl font-bold text-indigo-600">
-                  {generatedName.chinese_name}
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="text-6xl font-bold text-indigo-600">
+                    {generatedName.chinese_name}
+                  </div>
+                  <ButtonSaying
+                    text={generatedName.chinese_name}
+                    lang="zh-CN"
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm"
+                    onStart={() => console.log("Started playing Chinese name")}
+                    onEnd={() => console.log("Finished playing Chinese name")}
+                  >
+                    <Volume2 className="h-4 w-4" />
+                  </ButtonSaying>
                 </div>
                 <div className="text-2xl text-gray-600">
                   {generatedName.pinyin}
