@@ -44,14 +44,12 @@ export const metadata: Metadata = {
     title: "Get Your Perfect Chinese Name FREE | AI-Powered Generator",
     description:
       "Generate authentic Chinese names with deep cultural meaning in minutes. FREE first name, trusted by 50,000+ users worldwide.",
-    // images: [
-    //   {
-    //     url: "https://chinesename.sinohub.best/og-image.jpg",
-    //     width: 1200,
-    //     height: 630,
-    //     alt: "ChineseName.best - AI-Powered Chinese Name Generator",
-    //   },
-    // ],
+    images: [
+      {
+        url: "https://chinesename.sinohub.best/logo.png",
+        alt: "ChineseName.best - AI-Powered Chinese Name Generator",
+      },
+    ],
   },
   // twitter: {
   //   card: "summary_large_image",
@@ -69,15 +67,10 @@ export const metadata: Metadata = {
   other: {
     "google-site-verification": "your-google-verification-code",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
@@ -116,7 +109,7 @@ export default function RootLayout({
         url: "https://chinesename.sinohub.best",
         logo: {
           "@type": "ImageObject",
-          url: "https://chinesename.sinohub.best/logo.png",
+          url: "/logo.png",
           width: 300,
           height: 300,
         },
