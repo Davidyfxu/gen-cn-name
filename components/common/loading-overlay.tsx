@@ -4,7 +4,7 @@
  */
 
 import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import { LOADING_STYLES } from "@/lib/constants/styles";
 
 interface LoadingOverlayProps {

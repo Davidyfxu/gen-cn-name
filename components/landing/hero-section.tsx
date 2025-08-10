@@ -8,10 +8,10 @@ import { Sparkles, ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 
 interface HeroSectionProps {
-  onGetStarted: () => void;
+  onShowAuthModel: () => void;
 }
 
-export function HeroSection({ onGetStarted }: HeroSectionProps) {
+export function HeroSection({ onShowAuthModel }: HeroSectionProps) {
   const { user, loading } = useAuth();
 
   return (
@@ -20,9 +20,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       itemScope
       itemType="https://schema.org/SoftwareApplication"
     >
-      <div
-        className={`absolute inset-0 ${GRADIENT_STYLES.heroBackground}`}
-      ></div>
+      <div className={`absolute inset-0 ${GRADIENT_STYLES.heroBackground}`} />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <motion.div
@@ -69,7 +67,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   variant="ghost"
                   size="lg"
                   className="text-lg px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
-                  onClick={onGetStarted}
+                  onClick={onShowAuthModel}
                 >
                   <span className="hidden sm:inline-block">
                     Get Your FREE Chinese Name

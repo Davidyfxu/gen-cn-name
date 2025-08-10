@@ -66,20 +66,6 @@ export const LOADING_STYLES = {
   pulseStrong: "animate-pulse-strong",
 } as const;
 
-export const BUTTON_VARIANTS = {
-  // 主要按钮样式
-  primary: GRADIENT_STYLES.primaryButton,
-  primaryLarge: `${GRADIENT_STYLES.primaryButton} text-lg px-8 py-6`,
-
-  // Ghost变体的主要按钮
-  primaryGhost: `${GRADIENT_STYLES.primaryButton}`,
-
-  // 特殊按钮
-  purchaseButton: "w-full",
-  generateButton: "w-full text-lg py-6",
-  ctaButton: "text-lg px-8 py-6",
-} as const;
-
 export const TEXT_STYLES = {
   // 标题样式
   heroTitle: "text-4xl font-bold tracking-tight text-gray-900 sm:text-7xl",
@@ -101,44 +87,3 @@ export const TEXT_STYLES = {
   pinyinText: "text-2xl text-gray-600",
   traditionalText: "text-lg text-gray-500",
 } as const;
-
-export const LAYOUT_STYLES = {
-  // 容器
-  container: "container mx-auto px-4 py-8",
-  containerLarge: "container mx-auto px-6 lg:px-8",
-  maxWidth: "max-w-4xl mx-auto",
-  maxWidthLarge: "max-w-6xl mx-auto",
-  maxWidthMedium: "max-w-2xl mx-auto",
-
-  // Grid布局
-  gridCols1: "grid grid-cols-1 gap-6",
-  gridCols2: "grid md:grid-cols-2 gap-6",
-  gridCols3: "grid grid-cols-1 md:grid-cols-3 gap-6",
-  gridColsCards: "grid md:grid-cols-3 gap-3",
-
-  // Flex布局
-  centerFlex: "flex items-center justify-center",
-  spaceBetween: "flex items-center justify-between",
-  flexWrap: "flex items-center justify-center gap-x-6 flex-wrap",
-} as const;
-
-export const SPACING = {
-  sectionPadding: "py-12 sm:py-16",
-  cardPadding: "p-8",
-  cardPaddingSmall: "p-4",
-  marginBottom: "mb-8",
-  marginBottomSmall: "mb-4",
-  spaceY: "space-y-6",
-  spaceYSmall: "space-y-4",
-  spaceYLarge: "space-y-8",
-} as const;
-
-// 获取卡片变体的工具函数
-export function getCardVariant(variant: keyof typeof CARD_VARIANTS): string {
-  return CARD_VARIANTS[variant];
-}
-
-// 组合样式的工具函数
-export function combineClasses(...classes: string[]): string {
-  return classes.filter(Boolean).join(" ");
-}

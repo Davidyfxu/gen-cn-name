@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import { useEffect, useState, ComponentProps, useCallback } from "react";
 
 interface ButtonSayingProps

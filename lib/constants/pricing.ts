@@ -46,12 +46,12 @@ export const PRICING_MAP = PRICING_OPTIONS.reduce(
     acc[option.credits] = option.price * 100;
     return acc;
   },
-  {} as Record<number, number>
+  {} as Record<number, number>,
 );
 
 // 有效的积分数量
 export const VALID_CREDIT_AMOUNTS = PRICING_OPTIONS.map(
-  (option) => option.credits
+  (option) => option.credits,
 );
 
 // 价格相关的常量
@@ -65,18 +65,4 @@ export const PRICE_CONSTANTS = {
 // 获取价格选项的工具函数
 export function getPricingOption(credits: number): PricingOption | undefined {
   return PRICING_OPTIONS.find((option) => option.credits === credits);
-}
-
-// 计算节省金额
-export function calculateSavings(credits: number): number {
-  const option = getPricingOption(credits);
-  if (!option || !option.originalPrice) return 0;
-  return option.originalPrice - option.price;
-}
-
-// 获取单价
-export function getPricePerCredit(credits: number): number {
-  const option = getPricingOption(credits);
-  if (!option) return PRICE_CONSTANTS.CREDIT_COST;
-  return option.price / option.credits;
 }

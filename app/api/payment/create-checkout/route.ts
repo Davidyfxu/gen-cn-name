@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { PRICING_MAP, VALID_CREDIT_AMOUNTS } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,11 +20,10 @@ export async function POST(req: NextRequest) {
     const { credits } = await req.json();
 
     // Validate credits amount
-    const { VALID_CREDIT_AMOUNTS } = await import("@/lib/constants/pricing");
     if (!VALID_CREDIT_AMOUNTS.includes(credits)) {
       return NextResponse.json(
         { error: "Invalid credit amount" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate pricing (amounts in cents for Stripe)
-    const { PRICING_MAP } = await import("@/lib/constants/pricing");
     const amountInCents = PRICING_MAP[credits];
     const amountInDollars = amountInCents / 100;
 
@@ -85,7 +84,7 @@ export async function POST(req: NextRequest) {
       console.error("Failed to save payment record:", paymentError);
       return NextResponse.json(
         { error: "Failed to save payment record" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -97,7 +96,7 @@ export async function POST(req: NextRequest) {
     console.error("Checkout creation error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

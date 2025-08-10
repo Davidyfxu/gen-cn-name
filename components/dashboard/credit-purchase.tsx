@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { PRICING_OPTIONS } from "@/lib/constants/pricing";
 import { CARD_VARIANTS, LOADING_STYLES } from "@/lib/constants/styles";
 import { LoadingOverlay } from "@/components/common/loading-overlay";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 interface CreditPurchaseProps {
   onPurchase: (credits: number) => void;

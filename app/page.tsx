@@ -15,23 +15,19 @@ import {
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const handleGetStarted = () => {
-    setShowAuthModal(true);
-  };
-
   const handleShowAuthModal = () => {
     setShowAuthModal(true);
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeroSection onGetStarted={handleGetStarted} />
+      <HeroSection onShowAuthModel={handleShowAuthModal} />
       <DemoSection onShowAuthModal={handleShowAuthModal} />
       <FeaturesSection />
       <TestimonialsSection />
-      <PricingSection onGetStarted={handleGetStarted} />
+      <PricingSection onShowAuthModal={handleShowAuthModal} />
       <FaqSection />
-      <CtaSection onGetStarted={handleGetStarted} />
+      <CtaSection onShowAuthModal={handleShowAuthModal} />
 
       <AuthModal
         isOpen={showAuthModal}
