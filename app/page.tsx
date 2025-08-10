@@ -26,6 +26,8 @@ import {
   MapPin,
   ChevronDown,
   ChevronUp,
+  User,
+  UserCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -34,7 +36,7 @@ export default function Home() {
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [demoName, setDemoName] = useState("");
-  const [demoAge, setDemoAge] = useState("");
+  const [demoSex, setDemoSex] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const handleGetStarted = () => {
@@ -46,7 +48,10 @@ export default function Home() {
       setShowAuthModal(true);
     } else {
       // Redirect to actual generate page if logged in
-      redirect("/generate");
+      const path = `/generate?name=${encodeURIComponent(demoName)}${
+        demoSex ? `&gender=${encodeURIComponent(demoSex)}` : ""
+      }`;
+      redirect(path);
     }
   };
 
@@ -260,16 +265,37 @@ export default function Home() {
                         value={demoName}
                         onChange={(e) => setDemoName(e.target.value)}
                         placeholder="e.g., Sarah Johnson"
+                        required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Age</label>
-                      <Input
-                        value={demoAge}
-                        onChange={(e) => setDemoAge(e.target.value)}
-                        placeholder="e.g., 25"
-                        type="number"
-                      />
+                      <label className="text-sm font-medium">
+                        Gender (Optional)
+                      </label>
+                      <div className="flex space-x-2">
+                        <Button
+                          type="button"
+                          variant={demoSex === "male" ? "default" : "outline"}
+                          className="flex-1"
+                          onClick={() =>
+                            setDemoSex(demoSex === "male" ? "" : "male")
+                          }
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          Male
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={demoSex === "female" ? "default" : "outline"}
+                          className="flex-1"
+                          onClick={() =>
+                            setDemoSex(demoSex === "female" ? "" : "female")
+                          }
+                        >
+                          <UserCheck className="mr-2 h-4 w-4" />
+                          Female
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
@@ -278,7 +304,7 @@ export default function Home() {
                       variant="ghost"
                       onClick={handleDemoGenerate}
                       className="w-full text-lg py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white hover:text-white"
-                      disabled={!demoName.trim() || !demoAge.trim()}
+                      disabled={!demoName.trim()}
                     >
                       Generate My FREE Name
                       <Sparkles className="ml-2 h-5 w-5" />

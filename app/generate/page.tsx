@@ -36,7 +36,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { generateName, payment } from "@/app/api";
 import { ButtonSaying } from "@/components/button-saying";
 
@@ -56,11 +56,11 @@ interface ChatMessage {
 
 export default function GeneratePage() {
   const { user } = useAuth();
-  const { credits } = useAppStore();
-
+  const { credits, payments } = useAppStore();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    sex: "",
+    name: searchParams.get("name") || "",
+    sex: searchParams.get("gender") || "",
     age: "",
     hobbies: "",
     expectations: "",
@@ -190,32 +190,172 @@ export default function GeneratePage() {
                 )}
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl">
-                      Meaning & Significance
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 leading-relaxed">
-                      {generatedName.meaning}
-                    </p>
-                  </CardContent>
-                </Card>
+              <div className="relative">
+                {/* Check if user has any successful payments */}
+                {!payments?.some(
+                  (payment) => payment.status === "completed",
+                ) && (
+                  <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-lg">
+                    <div className="text-center space-y-4 max-w-md mx-auto p-8">
+                      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+                        <CreditCard className="h-12 w-12 mx-auto mb-4 text-indigo-500" />
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          Unlock Premium Content
+                        </h3>
+                      </div>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        To access the detailed meaning and cultural significance
+                        of your Chinese name, please complete a purchase to
+                        unlock these premium insights.
+                      </p>
+                      <Dialog
+                        open={showPurchaseDialog}
+                        onOpenChange={setShowPurchaseDialog}
+                      >
+                        <DialogTrigger asChild>
+                          <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-2">
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            Unlock Now
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          {isPurchasing ? (
+                            <div className="flex flex-col items-center justify-center p-8 space-y-4">
+                              <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+                              <div className="text-center space-y-2">
+                                <h3 className="text-lg font-medium">
+                                  Processing Payment
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  Please wait while we redirect you to
+                                  checkout...
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>Purchase Credits</DialogTitle>
+                                <DialogDescription>
+                                  Choose how many credits you'd like to
+                                  purchase. Each name generation costs 1 credit
+                                  ($5).
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 py-4">
+                                <div className="space-y-4">
+                                  <Card className="border-2 border-gray-200 hover:border-gray-300 transition-colors">
+                                    <CardHeader className="text-center pb-2">
+                                      <CardTitle className="text-lg">
+                                        1 Credit
+                                      </CardTitle>
+                                      <div className="text-2xl font-bold">
+                                        $5
+                                      </div>
+                                      <CardDescription className="text-xs">
+                                        Perfect for trying it out
+                                      </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="pt-2">
+                                      <Button
+                                        className="w-full"
+                                        onClick={() => handlePurchase(1)}
+                                      >
+                                        Purchase 1 Credit
+                                      </Button>
+                                    </CardContent>
+                                  </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl">
-                      Cultural Background
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 leading-relaxed">
-                      {generatedName.cultural_significance}
-                    </p>
-                  </CardContent>
-                </Card>
+                                  <Card className="border-2 border-indigo-200 bg-indigo-50 hover:border-indigo-300 transition-colors">
+                                    <CardHeader className="text-center pb-2">
+                                      <CardTitle className="text-lg">
+                                        5 Credits
+                                      </CardTitle>
+                                      <div className="text-2xl font-bold">
+                                        $20
+                                      </div>
+                                      <CardDescription className="text-xs">
+                                        <span className="line-through text-gray-500">
+                                          $25
+                                        </span>
+                                        <span className="text-green-600 ml-1">
+                                          Save $5!
+                                        </span>
+                                      </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="pt-2">
+                                      <Button
+                                        className="w-full"
+                                        onClick={() => handlePurchase(5)}
+                                      >
+                                        Purchase 5 Credits
+                                      </Button>
+                                    </CardContent>
+                                  </Card>
+
+                                  <Card className="border-2 border-purple-200 bg-purple-50 hover:border-purple-300 transition-colors">
+                                    <CardHeader className="text-center pb-2">
+                                      <CardTitle className="text-lg">
+                                        10 Credits
+                                      </CardTitle>
+                                      <div className="text-2xl font-bold">
+                                        $35
+                                      </div>
+                                      <CardDescription className="text-xs">
+                                        <span className="line-through text-gray-500">
+                                          $50
+                                        </span>
+                                        <span className="text-green-600 ml-1">
+                                          Save $15!
+                                        </span>
+                                      </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="pt-2">
+                                      <Button
+                                        className="w-full"
+                                        onClick={() => handlePurchase(10)}
+                                      >
+                                        Purchase 10 Credits
+                                      </Button>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-xl">
+                        Meaning & Significance
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700 leading-relaxed">
+                        {generatedName.meaning}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-xl">
+                        Cultural Background
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700 leading-relaxed">
+                        {generatedName.cultural_significance}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               <div className="flex justify-center space-x-4">
@@ -419,7 +559,7 @@ export default function GeneratePage() {
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-medium">
-                          Sex (Optional)
+                          Gender (Optional)
                         </label>
                         <div className="flex space-x-2">
                           <Button
