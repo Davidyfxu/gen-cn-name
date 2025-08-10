@@ -106,9 +106,9 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Hidden brand markup for search engines */}
       <div className="sr-only">
-        <h1 itemProp="name">ChineseName.best</h1>
+        <h1 itemProp="name">Sinohub.best</h1>
         <span itemProp="alternateName">
-          ChineseName.best - AI Chinese Name Generator
+          Sinohub.best - AI Chinese Name Generator
         </span>
       </div>
       {/* Enhanced Hero Section */}

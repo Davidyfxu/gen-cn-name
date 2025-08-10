@@ -17,14 +17,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title:
-    "Get Your Perfect Chinese Name FREE | AI-Powered Generator - ChineseName.best",
+    "Get Your Perfect Chinese Name FREE | AI-Powered Generator - Sinohub.best",
   description:
     "Generate authentic Chinese names with deep cultural meaning in minutes. FREE first name, trusted by 50,000+ users worldwide. Perfect pronunciation guides included!",
   keywords:
     "Chinese name generator, AI Chinese names, authentic Chinese names, Chinese name meaning, personalized Chinese names, Chinese characters, pinyin pronunciation, cultural Chinese names, foreign Chinese names, Chinese name translator, traditional Chinese names, simplified Chinese characters, Chinese calligraphy names, expat Chinese names, study abroad Chinese names",
-  authors: [{ name: "ChineseName.best" }],
-  creator: "ChineseName.best",
-  publisher: "ChineseName.best",
+  authors: [{ name: "Sinohub.best" }],
+  creator: "Sinohub.best",
+  publisher: "Sinohub.best",
   robots: {
     index: true,
     follow: true,
@@ -39,15 +39,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://chinesename.sinohub.best",
-    siteName: "ChineseName.best - AI Chinese Name Generator",
+    url: "https://sinohub.best",
+    siteName: "Sinohub.best - AI Chinese Name Generator",
     title: "Get Your Perfect Chinese Name FREE | AI-Powered Generator",
     description:
       "Generate authentic Chinese names with deep cultural meaning in minutes. FREE first name, trusted by 50,000+ users worldwide.",
     images: [
       {
-        url: "https://chinesename.sinohub.best/logo.png",
-        alt: "ChineseName.best - AI-Powered Chinese Name Generator",
+        url: "https://sinohub.best/logo.png",
+        alt: "Sinohub.best - AI-Powered Chinese Name Generator",
       },
     ],
   },
@@ -56,18 +56,18 @@ export const metadata: Metadata = {
     title: "Get Your Perfect Chinese Name FREE | AI-Powered Generator",
     description:
       "Generate authentic Chinese names with deep cultural meaning in minutes. FREE first name, trusted by 50,000+ users worldwide.",
-    images: ["https://chinesename.sinohub.best/logo.png"],
+    images: ["https://sinohub.best/logo.png"],
     creator: "@chinesenamebest",
   },
   alternates: {
-    canonical: "https://chinesename.sinohub.best",
+    canonical: "https://sinohub.best",
   },
   category: "Technology",
   classification: "AI Name Generator",
   other: {
     // "google-site-verification": "your-google-verification-code",
-    "application-name": "ChineseName.best",
-    "apple-mobile-web-app-title": "ChineseName.best",
+    "application-name": "Sinohub.best",
+    "apple-mobile-web-app-title": "Sinohub.best",
     "msapplication-TileColor": "#3B82F6",
   },
   icons: {
@@ -88,10 +88,10 @@ export default function RootLayout({
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://chinesename.sinohub.best/#website",
-        url: "https://chinesename.sinohub.best",
-        name: "ChineseName.best - AI Chinese Name Generator",
-        alternateName: "ChineseName.best",
+        "@id": "https://sinohub.best/#website",
+        url: "https://sinohub.best",
+        name: "Sinohub.best - AI Chinese Name Generator",
+        alternateName: "Sinohub.best",
         description:
           "AI-powered Chinese name generator with authentic cultural meanings",
         potentialAction: [
@@ -100,7 +100,7 @@ export default function RootLayout({
             target: {
               "@type": "EntryPoint",
               urlTemplate:
-                "https://chinesename.sinohub.best/generate?q={search_term_string}",
+                "https://sinohub.best/generate?q={search_term_string}",
             },
             "query-input": "required name=search_term_string",
           },
@@ -109,10 +109,10 @@ export default function RootLayout({
       },
       {
         "@type": "Organization",
-        "@id": "https://chinesename.sinohub.best/#organization",
-        name: "ChineseName.best - AI Chinese Name Generator",
-        alternateName: "ChineseName.best",
-        url: "https://chinesename.sinohub.best",
+        "@id": "https://sinohub.best/#organization",
+        name: "Sinohub.best - AI Chinese Name Generator",
+        alternateName: "Sinohub.best",
+        url: "https://sinohub.best",
         logo: {
           "@type": "ImageObject",
           url: "/logo.png",
@@ -123,15 +123,15 @@ export default function RootLayout({
       },
       {
         "@type": "WebApplication",
-        name: "ChineseName.best Chinese Name Generator",
+        name: "Sinohub.best Chinese Name Generator",
         applicationCategory: "UtilitiesApplication",
         operatingSystem: "Web Browser",
         description:
           "AI-powered tool to generate authentic Chinese names with cultural meanings, pronunciation guides, and calligraphy",
-        url: "https://chinesename.sinohub.best",
+        url: "https://sinohub.best",
         author: {
           "@type": "Organization",
-          name: "ChineseName.best",
+          name: "Sinohub.best",
         },
         offers: {
           "@type": "Offer",
@@ -151,7 +151,7 @@ export default function RootLayout({
         name: "Chinese Name Generation Service",
         provider: {
           "@type": "Organization",
-          name: "ChineseName.best",
+          name: "Sinohub.best",
         },
         description:
           "Professional AI-powered service for generating authentic Chinese names with cultural significance",
