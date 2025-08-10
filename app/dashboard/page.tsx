@@ -15,6 +15,8 @@ import { motion } from "framer-motion";
 import { CreditCard, History, Settings } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { payment } from "@/app/api";
+import { PageLoading } from "@/components/common/loading-overlay";
+import { paymentToast } from "@/lib/utils/toast-helpers";
 
 // Import our new components
 import { StatsCards } from "@/components/dashboard/stats-cards";
@@ -37,11 +39,11 @@ export default function DashboardPage() {
         window.location.href = data.checkout_url;
       } else {
         console.error("Payment creation failed:", data.error);
-        alert("Failed to create payment. Please try again.");
+        paymentToast.createPaymentError();
       }
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment system error. Please try again.");
+      paymentToast.systemError();
     } finally {
       setIsPurchasing(false);
     }
@@ -63,16 +65,7 @@ export default function DashboardPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading your dashboard...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <PageLoading text="Loading your dashboard..." />;
   }
 
   return (

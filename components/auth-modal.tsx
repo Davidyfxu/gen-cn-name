@@ -12,7 +12,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Mail, ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import {
+  validateEmail,
+  validatePassword,
+  validateFullName,
+} from "@/lib/utils/validation";
+import { authToast, handleApiError } from "@/lib/utils/toast-helpers";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -37,52 +42,28 @@ export function AuthModal({
   const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
-  // Email validation
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      setEmailError("Email is required");
-      return false;
-    }
-    if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address");
-      return false;
-    }
-    setEmailError("");
-    return true;
+  // 使用统一的验证函数
+  const handleEmailValidation = (email: string) => {
+    const result = validateEmail(email);
+    setEmailError(result.error || "");
+    return result.isValid;
   };
 
-  // Password validation
-  const validatePassword = (password: string) => {
-    if (!password) {
-      setPasswordError("Password is required");
-      return false;
-    }
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long");
-      return false;
-    }
-    setPasswordError("");
-    return true;
+  const handlePasswordValidation = (password: string) => {
+    const result = validatePassword(password);
+    setPasswordError(result.error || "");
+    return result.isValid;
   };
 
-  // Name validation
-  const validateFullName = (name: string) => {
-    if (mode === "signup" && !name.trim()) {
-      setNameError("Full name is required");
-      return false;
-    }
-    if (mode === "signup" && name.trim().length < 2) {
-      setNameError("Full name must be at least 2 characters long");
-      return false;
-    }
-    setNameError("");
-    return true;
+  const handleNameValidation = (name: string) => {
+    const result = validateFullName(name, mode === "signup");
+    setNameError(result.error || "");
+    return result.isValid;
   };
 
   // Clear errors when switching modes
   const handleSwitchMode = (
-    newMode: "signin" | "signup" | "forgot-password"
+    newMode: "signin" | "signup" | "forgot-password",
   ) => {
     onSwitchMode(newMode);
     setEmail("");
@@ -97,10 +78,10 @@ export function AuthModal({
     e.preventDefault();
 
     // Client-side validation
-    const isEmailValid = validateEmail(email);
+    const isEmailValid = handleEmailValidation(email);
     const isPasswordValid =
-      mode !== "forgot-password" ? validatePassword(password) : true;
-    const isNameValid = validateFullName(fullName);
+      mode !== "forgot-password" ? handlePasswordValidation(password) : true;
+    const isNameValid = handleNameValidation(fullName);
 
     if (!isEmailValid || !isPasswordValid || !isNameValid) {
       return;
@@ -119,73 +100,16 @@ export function AuthModal({
       }
 
       if (result?.error) {
-        // Enhanced error handling with specific messages
-        const errorMessage = result.error.message;
-
-        if (mode === "signin") {
-          if (
-            errorMessage.toLowerCase().includes("invalid login credentials")
-          ) {
-            toast.error(
-              "Invalid email or password. Please check your credentials and try again."
-            );
-          } else if (
-            errorMessage.toLowerCase().includes("email not confirmed")
-          ) {
-            toast.error(
-              "Please check your email and click the confirmation link before signing in."
-            );
-          } else if (errorMessage.toLowerCase().includes("too many requests")) {
-            toast.error(
-              "Too many login attempts. Please wait a few minutes before trying again."
-            );
-          } else {
-            toast.error(errorMessage || "Sign in failed. Please try again.");
-          }
-        } else if (mode === "signup") {
-          if (
-            errorMessage.toLowerCase().includes("already registered") ||
-            errorMessage.toLowerCase().includes("already exists")
-          ) {
-            toast.error(
-              "An account with this email already exists. Please try signing in instead."
-            );
-          } else if (errorMessage.toLowerCase().includes("password")) {
-            toast.error("Password must be at least 6 characters long.");
-          } else if (errorMessage.toLowerCase().includes("email")) {
-            toast.error("Please enter a valid email address.");
-          } else {
-            toast.error(
-              errorMessage || "Account creation failed. Please try again."
-            );
-          }
-        } else if (mode === "forgot-password") {
-          if (errorMessage.toLowerCase().includes("user not found")) {
-            toast.error(
-              "No account found with this email address. Please check your email or sign up for a new account."
-            );
-          } else if (errorMessage.toLowerCase().includes("too many requests")) {
-            toast.error(
-              "Too many reset requests. Please wait a few minutes before trying again."
-            );
-          } else {
-            toast.error(
-              errorMessage || "Failed to send reset email. Please try again."
-            );
-          }
-        }
+        // 使用统一的错误处理
+        handleApiError(result.error, "auth");
       } else {
         // Success messages
         if (mode === "signup") {
-          toast.success(
-            "Account created successfully! Please check your email to confirm your account."
-          );
+          authToast.signUpSuccess();
         } else if (mode === "signin") {
-          toast.success("Welcome back! You have been signed in successfully.");
+          authToast.signInSuccess();
         } else if (mode === "forgot-password") {
-          toast.success(
-            "Password reset email sent! Please check your inbox and follow the instructions."
-          );
+          authToast.resetPasswordSuccess();
         }
         onClose();
         setEmail("");
@@ -194,21 +118,7 @@ export function AuthModal({
       }
     } catch (error) {
       console.error("Authentication error:", error);
-      if (mode === "signin") {
-        toast.error(
-          "Sign in failed. Please check your internet connection and try again."
-        );
-      } else if (mode === "signup") {
-        toast.error(
-          "Account creation failed. Please check your internet connection and try again."
-        );
-      } else if (mode === "forgot-password") {
-        toast.error(
-          "Failed to send reset email. Please check your internet connection and try again."
-        );
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+      authToast.connectionError();
     } finally {
       setIsLoading(false);
     }
@@ -219,25 +129,13 @@ export function AuthModal({
     try {
       const { error } = await signInWithGoogle();
       if (error) {
-        if (error.message.toLowerCase().includes("popup")) {
-          toast.error(
-            "Google sign-in popup was blocked. Please allow popups and try again."
-          );
-        } else if (error.message.toLowerCase().includes("network")) {
-          toast.error(
-            "Network error. Please check your internet connection and try again."
-          );
-        } else {
-          toast.error(
-            error.message || "Google authentication failed. Please try again."
-          );
-        }
+        handleApiError(error, "auth");
       }
       // Don't close modal here as user will be redirected
     } catch (error) {
       console.error("Google auth error:", error);
-      toast.error(
-        "Google authentication failed. Please try again or use email/password instead."
+      authToast.genericError(
+        "Google authentication failed. Please try again or use email/password instead.",
       );
     } finally {
       setIsLoading(false);
@@ -339,9 +237,9 @@ export function AuthModal({
                   value={fullName}
                   onChange={(e) => {
                     setFullName(e.target.value);
-                    if (nameError) validateFullName(e.target.value);
+                    if (nameError) handleNameValidation(e.target.value);
                   }}
-                  onBlur={() => validateFullName(fullName)}
+                  onBlur={() => handleNameValidation(fullName)}
                   required
                   aria-invalid={!!nameError}
                   aria-describedby={nameError ? "fullName-error" : undefined}
@@ -373,9 +271,9 @@ export function AuthModal({
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  if (emailError) validateEmail(e.target.value);
+                  if (emailError) handleEmailValidation(e.target.value);
                 }}
-                onBlur={() => validateEmail(email)}
+                onBlur={() => handleEmailValidation(email)}
                 required
                 aria-invalid={!!emailError}
                 aria-describedby={emailError ? "email-error" : undefined}
@@ -419,9 +317,9 @@ export function AuthModal({
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    if (passwordError) validatePassword(e.target.value);
+                    if (passwordError) handlePasswordValidation(e.target.value);
                   }}
-                  onBlur={() => validatePassword(password)}
+                  onBlur={() => handlePasswordValidation(password)}
                   required
                   minLength={6}
                   aria-invalid={!!passwordError}

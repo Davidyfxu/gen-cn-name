@@ -15,6 +15,7 @@ import { User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AuthModal } from "@/components/auth-modal";
 import { channelIO } from "@/lib/channel";
+import { TEXT_STYLES } from "@/lib/constants/styles";
 
 export function Navigation() {
   const { user, signOut, loading } = useAuth();
@@ -69,9 +70,7 @@ export function Navigation() {
             {/* Center section - Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center space-x-2">
-                <span className="hidden sm:inline-block font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  Sinohub.best
-                </span>
+                <span className={TEXT_STYLES.brandText}>Sinohub.best</span>
               </Link>
             </div>
 

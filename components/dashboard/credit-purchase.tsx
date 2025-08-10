@@ -6,54 +6,41 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { PRICING_OPTIONS } from "@/lib/constants/pricing";
+import { CARD_VARIANTS, LOADING_STYLES } from "@/lib/constants/styles";
+import { LoadingOverlay } from "@/components/common/loading-overlay";
+import { cn } from "@/lib/utils";
 
 interface CreditPurchaseProps {
   onPurchase: (credits: number) => void;
   isPurchasing: boolean;
 }
 
-interface PurchaseOption {
-  credits: number;
-  price: number;
-  originalPrice?: number;
-  description: string;
-  highlight?: boolean;
-}
-
-const purchaseOptions: PurchaseOption[] = [
-  {
-    credits: 1,
-    price: 5,
-    description: "Perfect for trying it out",
-  },
-  {
-    credits: 5,
-    price: 20,
-    originalPrice: 25,
-    description: "Save $5!",
-    highlight: true,
-  },
-  {
-    credits: 10,
-    price: 35,
-    originalPrice: 50,
-    description: "Save $15!",
-    highlight: true,
-  },
-];
+// 使用统一的价格配置
 
 export function CreditPurchase({
   onPurchase,
   isPurchasing,
 }: CreditPurchaseProps) {
+  const getCardVariant = (option: (typeof PRICING_OPTIONS)[0]): string => {
+    if (!option.highlight) return CARD_VARIANTS.default;
+
+    switch (option.variant) {
+      case "indigo":
+        return CARD_VARIANTS.indigo;
+      case "purple":
+        return CARD_VARIANTS.purple;
+      case "green":
+        return CARD_VARIANTS.green;
+      default:
+        return CARD_VARIANTS.default;
+    }
+  };
+
   return (
     <Card className="relative">
-      {isPurchasing && (
-        <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-lg">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      )}
+      <LoadingOverlay isLoading={isPurchasing} />
+
       <CardHeader>
         <CardTitle>Purchase Credits</CardTitle>
         <CardDescription>
@@ -63,17 +50,8 @@ export function CreditPurchase({
       </CardHeader>
       <CardContent>
         <div className="grid md:grid-cols-3 gap-3">
-          {purchaseOptions.map((option, index) => (
-            <Card
-              key={option.credits}
-              className={`border-2 ${
-                option.highlight
-                  ? index === 1
-                    ? "border-indigo-200 bg-indigo-50"
-                    : "border-purple-200 bg-purple-50"
-                  : "border-gray-200"
-              }`}
-            >
+          {PRICING_OPTIONS.map((option) => (
+            <Card key={option.credits} className={getCardVariant(option)}>
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-base">
                   {option.credits} Credit{option.credits > 1 ? "s" : ""}
@@ -86,7 +64,7 @@ export function CreditPurchase({
                         ${option.originalPrice}
                       </span>
                       <span className="text-green-600 ml-1">
-                        {option.description}
+                        {option.savings}
                       </span>
                     </>
                   ) : (
@@ -99,6 +77,7 @@ export function CreditPurchase({
                   className="w-full"
                   size="sm"
                   onClick={() => onPurchase(option.credits)}
+                  disabled={isPurchasing}
                 >
                   Purchase
                 </Button>

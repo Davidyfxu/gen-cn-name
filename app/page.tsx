@@ -14,6 +14,12 @@ import { useState } from "react";
 import { AuthModal } from "@/components/auth-modal";
 import { motion } from "framer-motion";
 import {
+  GRADIENT_STYLES,
+  CARD_VARIANTS,
+  TEXT_STYLES,
+} from "@/lib/constants/styles";
+import { PRICING_OPTIONS } from "@/lib/constants/pricing";
+import {
   Sparkles,
   Star,
   ArrowRight,
@@ -123,7 +129,9 @@ export default function Home() {
         itemScope
         itemType="https://schema.org/SoftwareApplication"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
+        <div
+          className={`absolute inset-0 ${GRADIENT_STYLES.heroBackground}`}
+        ></div>
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <motion.div
@@ -136,20 +144,12 @@ export default function Home() {
                   🎉 Your first Chinese name is FREE • Trusted by 50,000+ people
                 </div>
               </div>
-              <h1
-                className="text-4xl font-bold tracking-tight text-gray-900 sm:text-7xl"
-                itemProp="name"
-              >
+              <h1 className={TEXT_STYLES.heroTitle} itemProp="name">
                 Get Your Perfect{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-                  Chinese Name
-                </span>{" "}
-                in Minutes
+                <span className={TEXT_STYLES.primaryText}>Chinese Name</span> in
+                Minutes
               </h1>
-              <p
-                className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto"
-                itemProp="description"
-              >
+              <p className={TEXT_STYLES.heroDescription} itemProp="description">
                 Our AI creates authentic Chinese names with deep cultural
                 meaning, perfect pronunciation guides, and beautiful
                 calligraphy. Trusted by expats, students, and professionals

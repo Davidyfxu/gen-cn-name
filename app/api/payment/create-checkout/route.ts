@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     const { credits } = await req.json();
 
     // Validate credits amount
-    const validCredits = [1, 5, 10];
-    if (!validCredits.includes(credits)) {
+    const { VALID_CREDIT_AMOUNTS } = await import("@/lib/constants/pricing");
+    if (!VALID_CREDIT_AMOUNTS.includes(credits)) {
       return NextResponse.json(
         { error: "Invalid credit amount" },
         { status: 400 }
@@ -41,13 +41,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate pricing (amounts in cents for Stripe)
-    const pricing = {
-      1: 500, // $5.00
-      5: 2000, // $20.00 (Save $5)
-      10: 3500, // $35.00 (Save $15)
-    };
-
-    const amountInCents = pricing[credits as keyof typeof pricing];
+    const { PRICING_MAP } = await import("@/lib/constants/pricing");
+    const amountInCents = PRICING_MAP[credits];
     const amountInDollars = amountInCents / 100;
 
     // Create Stripe Checkout Session
