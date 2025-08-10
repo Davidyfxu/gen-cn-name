@@ -28,6 +28,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -45,7 +46,7 @@ export default function Home() {
       setShowAuthModal(true);
     } else {
       // Redirect to actual generate page if logged in
-      window.location.href = "/generate";
+      redirect("/generate");
     }
   };
 
