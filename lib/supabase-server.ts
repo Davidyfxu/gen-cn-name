@@ -7,7 +7,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // For server-side usage (API routes and server components)
 export const createServerSupabaseClient = async () => {
   const cookieStore = await cookies();
-  
+
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
@@ -19,15 +19,12 @@ export const createServerSupabaseClient = async () => {
             cookieStore.set(name, value, {
               ...options,
               httpOnly: false, // Important for auth cookies
-              secure: process.env.NODE_ENV === 'production',
-              sameSite: 'lax',
+              secure: process.env.NODE_ENV === "production",
+              sameSite: "lax",
             });
           });
         } catch (error) {
-          // The `set` method was called from a Server Component.
-          // This can be ignored if you have middleware refreshing
-          // user sessions.
-          console.log('Cookie setting error in server component:', error);
+          console.log("Cookie setting error in server component:", error);
         }
       },
     },
