@@ -187,7 +187,7 @@ export default function RootLayout({
         />
         <script
           defer
-          data-domain="chinesename.sinohub.best"
+          data-domain="sinohub.best"
           src="https://plausible.sinohub.best/js/script.js"
         />
       </head>
