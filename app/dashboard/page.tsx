@@ -139,7 +139,10 @@ export default function DashboardPage() {
             </TabsList>
 
             <TabsContent value="history">
-              <GenerationHistory generations={generations} />
+              <GenerationHistory
+                generations={generations}
+                payments={payments}
+              />
             </TabsContent>
 
             <TabsContent value="credits">
