@@ -29,7 +29,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import { generateName, payment } from "@/app/api";
 import { ButtonSaying } from "@/components/button-saying";
 import { PurchaseCreditsDialog } from "@/components/common/purchase-credits-dialog";
@@ -50,13 +50,26 @@ interface ChatMessage {
   content: string;
 }
 
-export default function GeneratePage() {
+export default async function GeneratePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolvedSearchParams = await searchParams;
+
+  return <GeneratePageClient searchParams={resolvedSearchParams} />;
+}
+
+function GeneratePageClient({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
   const { user } = useAuth();
   const { credits, payments } = useAppStore();
-  const searchParams = useSearchParams();
   const [formData, setFormData] = useState<FormData>({
-    name: searchParams.get("name") || "",
-    sex: searchParams.get("gender") || "",
+    name: (searchParams?.["name"] || "") as string,
+    sex: (searchParams?.["gender"] || "") as string,
     age: "",
     hobbies: "",
     expectations: "",
@@ -189,7 +202,7 @@ export default function GeneratePage() {
               <div className="relative">
                 {/* Check if user has any successful payments */}
                 {!payments?.some(
-                  (payment) => payment.status === "completed"
+                  (payment) => payment.status === "completed",
                 ) && (
                   <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-lg">
                     <div className="text-center space-y-4 max-w-md mx-auto p-8">
