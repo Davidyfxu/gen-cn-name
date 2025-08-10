@@ -28,6 +28,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -45,7 +46,7 @@ export default function Home() {
       setShowAuthModal(true);
     } else {
       // Redirect to actual generate page if logged in
-      window.location.href = "/generate";
+      redirect("/generate");
     }
   };
 
@@ -106,9 +107,9 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Hidden brand markup for search engines */}
       <div className="sr-only">
-        <h1 itemProp="name">ChineseName.best</h1>
+        <h1 itemProp="name">Sinohub.best</h1>
         <span itemProp="alternateName">
-          ChineseName.best - AI Chinese Name Generator
+          Sinohub.best - AI Chinese Name Generator
         </span>
       </div>
       {/* Enhanced Hero Section */}
