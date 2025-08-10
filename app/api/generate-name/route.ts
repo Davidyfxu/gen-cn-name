@@ -58,21 +58,21 @@ export async function POST(req: NextRequest) {
       };
 
       prompt = `Create a personalized Chinese name for someone with these details:
-Name: ${data.name}
-Sex: ${data.sex}
-Age: ${data.age}
-Hobbies: ${data.hobbies}
-Expectations/Aspirations: ${data.expectations}
-Knowledge of China: ${data.chinaKnowledge}
-
-Please provide:
-1. A Chinese name (simplified characters)
-2. Pinyin pronunciation
-3. Traditional characters (if different)
-4. Detailed meaning and significance of the name
-5. Cultural background and why this name suits them
-
-Format the response as JSON with these fields: chinese_name, pinyin, traditional, meaning, cultural_significance`;
+      Name: ${data.name}
+      Sex: ${data.sex}
+      Age: ${data.age}
+      Hobbies: ${data.hobbies}
+      Expectations/Aspirations: ${data.expectations}
+      Knowledge of China: ${data.chinaKnowledge}
+      
+      Please provide:
+      1. A Chinese name (simplified characters)
+      2. Pinyin pronunciation
+      3. Traditional characters (if different)
+      4. Detailed meaning and significance of the name
+      5. Cultural background and why this name suits them
+    
+    Format the response as JSON with these fields: chinese_name, pinyin, traditional, meaning, cultural_significance`;
     } else if (type === "chat") {
       inputData = { chat_context: JSON.stringify(data) };
 
@@ -84,17 +84,17 @@ Format the response as JSON with these fields: chinese_name, pinyin, traditional
         .join("\n");
 
       prompt = `Based on this conversation, create a personalized Chinese name:
-
-${conversation}
-
-Please provide:
-1. A Chinese name (simplified characters)
-2. Pinyin pronunciation  
-3. Traditional characters (if different)
-4. Detailed meaning and significance of the name
-5. Cultural background and why this name suits them
-
-Format the response as JSON with these fields: chinese_name, pinyin, traditional, meaning, cultural_significance`;
+      
+      ${conversation}
+      
+      Please provide:
+      1. A Chinese name (simplified characters)
+      2. Pinyin pronunciation  
+      3. Traditional characters (if different)
+      4. Detailed meaning and significance of the name
+      5. Cultural background and why this name suits them
+      
+    Format the response as JSON with these fields: chinese_name, pinyin, traditional, meaning, cultural_significance`;
     }
 
     // Call DeepSeek API using OpenAI SDK

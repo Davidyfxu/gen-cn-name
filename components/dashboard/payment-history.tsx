@@ -6,7 +6,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { CreditCard } from "lucide-react";
-import { Payment } from "@/lib/supabase";
+import { Payment } from "@/lib/store";
 
 interface PaymentHistoryProps {
   payments: Payment[];
@@ -63,7 +63,7 @@ export function PaymentHistory({ payments }: PaymentHistoryProps) {
                           day: "numeric",
                           hour: "2-digit",
                           minute: "2-digit",
-                        }
+                        },
                       )}
                     </p>
                   </div>

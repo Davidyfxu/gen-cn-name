@@ -71,8 +71,8 @@ export function DemoSection({ onShowAuthModal }: DemoSectionProps) {
           viewport={{ once: true }}
         >
           <Card className="relative overflow-hidden border-2 border-indigo-200 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-indigo-50 to-purple-50">
-              <CardTitle className="text-2xl">Quick Demo</CardTitle>
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl">Quick AI Generation</CardTitle>
               <CardDescription>
                 See what your Chinese name could look like
               </CardDescription>

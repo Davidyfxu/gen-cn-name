@@ -8,10 +8,10 @@ import { Sparkles, ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 
 interface PricingSectionProps {
-  onGetStarted: () => void;
+  onShowAuthModal: () => void;
 }
 
-export function PricingSection({ onGetStarted }: PricingSectionProps) {
+export function PricingSection({ onShowAuthModal }: PricingSectionProps) {
   const { user } = useAuth();
 
   return (
@@ -105,7 +105,7 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
                   ) : (
                     <Button
                       className="w-full bg-green-600 hover:bg-green-700"
-                      onClick={onGetStarted}
+                      onClick={onShowAuthModal}
                     >
                       Start Free
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -173,7 +173,7 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
                   ) : (
                     <Button
                       className="w-full bg-indigo-600 hover:bg-indigo-700"
-                      onClick={onGetStarted}
+                      onClick={onShowAuthModal}
                     >
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -241,7 +241,7 @@ export function PricingSection({ onGetStarted }: PricingSectionProps) {
                   ) : (
                     <Button
                       className="w-full bg-purple-600 hover:bg-purple-700"
-                      onClick={onGetStarted}
+                      onClick={onShowAuthModal}
                     >
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />

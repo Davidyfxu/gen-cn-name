@@ -12,14 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
 import {
@@ -40,9 +33,8 @@ import { redirect, useSearchParams } from "next/navigation";
 import { generateName, payment } from "@/app/api";
 import { ButtonSaying } from "@/components/button-saying";
 import { PurchaseCreditsDialog } from "@/components/common/purchase-credits-dialog";
-import { LoadingOverlay } from "@/components/common/loading-overlay";
 import { GRADIENT_STYLES, TEXT_STYLES } from "@/lib/constants/styles";
-import { paymentToast, generationToast } from "@/lib/utils/toast-helpers";
+import { paymentToast } from "@/lib/utils/toast-helpers";
 
 interface FormData {
   name: string;
@@ -303,115 +295,19 @@ export default function GeneratePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <Dialog
-                open={showPurchaseDialog}
+              <PurchaseCreditsDialog
+                isOpen={showPurchaseDialog}
                 onOpenChange={setShowPurchaseDialog}
+                onPurchase={handlePurchase}
+                isPurchasing={isPurchasing}
+              />
+              <Button
+                className="w-full"
+                onClick={() => setShowPurchaseDialog(true)}
               >
-                <DialogTrigger asChild>
-                  <Button className="w-full">
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Purchase Credits
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  {isPurchasing ? (
-                    <div className="flex flex-col items-center justify-center p-8 space-y-4">
-                      <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-                      <div className="text-center space-y-2">
-                        <h3 className="text-lg font-medium">
-                          Processing Payment
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          Please wait while we redirect you to checkout...
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <DialogHeader>
-                        <DialogTitle>Purchase Credits</DialogTitle>
-                        <DialogDescription>
-                          Choose how many credits you'd like to purchase. Each
-                          name generation costs 1 credit ($5).
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="space-y-4">
-                          <Card className="border-2 border-gray-200 hover:border-gray-300 transition-colors">
-                            <CardHeader className="text-center pb-2">
-                              <CardTitle className="text-lg">
-                                1 Credit
-                              </CardTitle>
-                              <div className="text-2xl font-bold">$5</div>
-                              <CardDescription className="text-xs">
-                                Perfect for trying it out
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent className="pt-2">
-                              <Button
-                                className="w-full"
-                                onClick={() => handlePurchase(1)}
-                              >
-                                Purchase 1 Credit
-                              </Button>
-                            </CardContent>
-                          </Card>
-
-                          <Card className="border-2 border-indigo-200 bg-indigo-50 hover:border-indigo-300 transition-colors">
-                            <CardHeader className="text-center pb-2">
-                              <CardTitle className="text-lg">
-                                5 Credits
-                              </CardTitle>
-                              <div className="text-2xl font-bold">$20</div>
-                              <CardDescription className="text-xs">
-                                <span className="line-through text-gray-500">
-                                  $25
-                                </span>
-                                <span className="text-green-600 ml-1">
-                                  Save $5!
-                                </span>
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent className="pt-2">
-                              <Button
-                                className="w-full"
-                                onClick={() => handlePurchase(5)}
-                              >
-                                Purchase 5 Credits
-                              </Button>
-                            </CardContent>
-                          </Card>
-
-                          <Card className="border-2 border-purple-200 bg-purple-50 hover:border-purple-300 transition-colors">
-                            <CardHeader className="text-center pb-2">
-                              <CardTitle className="text-lg">
-                                10 Credits
-                              </CardTitle>
-                              <div className="text-2xl font-bold">$35</div>
-                              <CardDescription className="text-xs">
-                                <span className="line-through text-gray-500">
-                                  $50
-                                </span>
-                                <span className="text-green-600 ml-1">
-                                  Save $15!
-                                </span>
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent className="pt-2">
-                              <Button
-                                className="w-full"
-                                onClick={() => handlePurchase(10)}
-                              >
-                                Purchase 10 Credits
-                              </Button>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </DialogContent>
-              </Dialog>
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Purchase Credits
+              </Button>
             </CardContent>
           </Card>
         ) : (

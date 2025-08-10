@@ -6,10 +6,10 @@ import { Sparkles, ArrowRight, Users, MapPin, Award } from "lucide-react";
 import Link from "next/link";
 
 interface CtaSectionProps {
-  onGetStarted: () => void;
+  onShowAuthModal: () => void;
 }
 
-export function CtaSection({ onGetStarted }: CtaSectionProps) {
+export function CtaSection({ onShowAuthModal }: CtaSectionProps) {
   const { user } = useAuth();
 
   return (
@@ -46,7 +46,7 @@ export function CtaSection({ onGetStarted }: CtaSectionProps) {
               variant="secondary"
               size="lg"
               className="text-lg px-8 py-6"
-              onClick={onGetStarted}
+              onClick={onShowAuthModal}
             >
               <span>Start FREE Now</span>
               <ArrowRight className="h-5 w-5" />
